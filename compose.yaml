@@ -1,0 +1,18 @@
+
+version: '3.8'
+services:
+  postgres:
+    image: 'postgres:latest'
+    container_name: recipe-app-postgres
+    environment:
+      POSTGRES_DB: recipe_app
+      POSTGRES_USER: recipe_user
+      POSTGRES_PASSWORD: recipe_password
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
