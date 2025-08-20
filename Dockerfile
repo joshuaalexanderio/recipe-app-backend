@@ -1,4 +1,4 @@
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-alpine
 
 WORKDIR /app
 
@@ -11,11 +11,7 @@ RUN ./mvnw dependency:go-offline -B
 
 COPY src src
 
-RUN ./mvnw clean package -DskipTests && \
-    echo "Build completed. Contents of target:" && \
-    ls -la target/ && \
-    echo "JAR files found:" && \
-    ls -la target/*.jar
+RUN ./mvnw clean package -DskipTests
 
 EXPOSE 8080
 
