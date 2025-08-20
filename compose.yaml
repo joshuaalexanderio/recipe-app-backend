@@ -1,9 +1,7 @@
-
 version: '3.8'
 services:
   postgres:
     image: 'postgres:latest'
-    container_name: recipe-app-postgres
     environment:
       POSTGRES_DB: recipe_app
       POSTGRES_USER: recipe_user
@@ -12,6 +10,16 @@ services:
       - "5434:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  backend:
+    build: .
+    container_name: recipe-app-backend
+    ports:
+      - "8080:8080"
+    env_file: .env
+    depends_on:
+      - postgres
     restart: unless-stopped
 
 volumes:

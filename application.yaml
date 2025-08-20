@@ -1,18 +1,38 @@
 spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
   datasource:
-    url: jdbc:postgresql://localhost:5434/recipe_app
-    username: recipe_user
-    password: recipe_password
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5434/recipe_app}
+    username: ${DATABASE_USERNAME:recipe_user}
+    password: ${DATABASE_PASSWORD:recipe_password}
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: ${JPA_DDL_AUTO:create-drop}
+    show-sql: ${JPA_SHOW_SQL:true}
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+logging:
+  level:
+    org.springframework.boot.autoconfigure.jdbc: DEBUG
+    com.zaxxer.hikari: DEBUG
+management:
+  endpoints:
+    web:
+      exposure:
+        include: env
 
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
+
+
+# App-specific config
+app:
+  todoist:
+    client-id: ${TODOIST_CLIENT_ID:}
+    client-secret: ${TODOIST_CLIENT_SECRET:}
