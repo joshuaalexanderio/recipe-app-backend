@@ -3,9 +3,9 @@ spring:
     active: ${SPRING_PROFILES_ACTIVE:dev}
 
   datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5434/recipe_app}
-    username: ${DATABASE_USERNAME:recipe_user}
-    password: ${DATABASE_PASSWORD:recipe_password}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5434/recipe_app}
+    username: ${SPRING_DATASOURCE_USERNAME:recipe_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:recipe_password}
     driver-class-name: org.postgresql.Driver
 
   jpa:
