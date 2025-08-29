@@ -10,9 +10,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
-public interface RecipeMapper {
+public interface EntityMapper {
 
-    RecipeMapper INSTANCE = Mappers.getMapper(RecipeMapper.class);
+    EntityMapper INSTANCE = Mappers.getMapper(EntityMapper.class);
 
     IngredientDTO toIngredientDTO(Ingredient ingredient);
     UserDTO toUserDTO(User user);
