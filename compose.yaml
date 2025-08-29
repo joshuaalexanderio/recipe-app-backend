@@ -4,8 +4,10 @@ services:
     image: 'postgres:17.6-alpine3.21'
     environment:
       POSTGRES_DB: recipe_app
-      POSTGRES_USER: recipe_user
-      POSTGRES_PASSWORD: recipe_password
+      POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME}
+      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SECURITY_USERNAME: ${SECURITY_USERNAME}
+      SECURITY_PASSWORD: ${SECURITY_PASSWORD}
     ports:
       - "5434:5432"
     volumes:
