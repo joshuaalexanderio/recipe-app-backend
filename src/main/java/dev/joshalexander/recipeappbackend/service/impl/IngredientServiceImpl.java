@@ -14,7 +14,7 @@ public class IngredientServiceImpl implements IngredientService {
     private final EntityMapper ingredientMapper;
     private final IngredientRepository ingredientRepository;
 
-    public IngredientServiceImpl(EntityMapper ingredientMapper, IngredientRepository ingredientRepository, IngredientRepository ingredientRepository1, EntityMapper ingredientMapper1) {
+    public IngredientServiceImpl(EntityMapper ingredientMapper, IngredientRepository ingredientRepository) {
         this.ingredientRepository = ingredientRepository;
         this.ingredientMapper = ingredientMapper;
     }
