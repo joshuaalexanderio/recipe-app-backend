@@ -32,7 +32,7 @@ public class SecurityConfig {
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable);;
+                .csrf(AbstractHttpConfigurer::disable);
 
 
         return http.build();
