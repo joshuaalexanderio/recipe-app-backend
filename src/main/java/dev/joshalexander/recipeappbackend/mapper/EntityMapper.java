@@ -13,6 +13,8 @@ import org.mapstruct.factory.Mappers;
 public interface EntityMapper {
 
     IngredientDTO toIngredientDTO(Ingredient ingredient);
+    Ingredient toIngredient(IngredientDTO ingredientDTO);
     UserDTO toUserDTO(User user);
     RecipeDTO toRecipeDTO(Recipe recipe);
+
 }

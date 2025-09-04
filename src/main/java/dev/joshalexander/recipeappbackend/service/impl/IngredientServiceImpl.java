@@ -1,6 +1,7 @@
 package dev.joshalexander.recipeappbackend.service.impl;
 
 import dev.joshalexander.recipeappbackend.dto.IngredientDTO;
+import dev.joshalexander.recipeappbackend.entity.Ingredient;
 import dev.joshalexander.recipeappbackend.mapper.EntityMapper;
 import dev.joshalexander.recipeappbackend.repository.IngredientRepository;
 import dev.joshalexander.recipeappbackend.service.IngredientService;
@@ -24,8 +25,15 @@ public class IngredientServiceImpl implements IngredientService {
                 .map(ingredientMapper::toIngredientDTO)
                 .toList();
     }
+    @Override
     public Optional<IngredientDTO> getIngredientById(Long id) {
         return ingredientRepository.findById(id)
                 .map(ingredientMapper::toIngredientDTO);
+    }
+    @Override
+    public IngredientDTO createIngredient(IngredientDTO ingredientDTO) {
+        Ingredient ingredient = ingredientMapper.toIngredient(ingredientDTO);
+        Ingredient savedIngredient = ingredientRepository.save(ingredient);
+        return ingredientMapper.toIngredientDTO(savedIngredient);
     }
 }

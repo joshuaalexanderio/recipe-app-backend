@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface IngredientService {
     List<IngredientDTO> getAllIngredients();
     Optional<IngredientDTO> getIngredientById(Long id);
+    IngredientDTO createIngredient(IngredientDTO ingredientDTO);
 }

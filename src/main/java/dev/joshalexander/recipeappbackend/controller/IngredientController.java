@@ -1,11 +1,9 @@
 package dev.joshalexander.recipeappbackend.controller;
 import dev.joshalexander.recipeappbackend.dto.IngredientDTO;
 import dev.joshalexander.recipeappbackend.service.IngredientService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,10 +17,9 @@ public class IngredientController {
     }
 
     @GetMapping
-    public ResponseEntity<List<IngredientDTO>> getRecipeIngredients(@PathVariable Long recipeId) {
-        List<IngredientDTO> ingredient = ingredientService.getAllIngredients();
-        return ResponseEntity.ok(ingredient);
-        List<IngredientDTO> ingredients = ingredientService.getRecipeIngredients(recipeId);
+    public ResponseEntity<List<IngredientDTO>> getAllIngredients() {
+        List<IngredientDTO> ingredients = ingredientService.getAllIngredients();
+        return ResponseEntity.ok(ingredients);
     }
 
     @GetMapping("/{ingredientId}")
@@ -30,5 +27,11 @@ public class IngredientController {
         Optional<IngredientDTO> ingredient = ingredientService.getIngredientById(ingredientId);
 
         return ingredient.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<IngredientDTO> createIngredient(@RequestBody IngredientDTO ingredientData) {
+        IngredientDTO createdIngredient = ingredientService.createIngredient(ingredientData);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdIngredient);
     }
 }
