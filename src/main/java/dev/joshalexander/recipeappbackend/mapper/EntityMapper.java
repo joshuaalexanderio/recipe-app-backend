@@ -12,8 +12,6 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public interface EntityMapper {
 
-    EntityMapper INSTANCE = Mappers.getMapper(EntityMapper.class);
-
     IngredientDTO toIngredientDTO(Ingredient ingredient);
     UserDTO toUserDTO(User user);
     RecipeDTO toRecipeDTO(Recipe recipe);
