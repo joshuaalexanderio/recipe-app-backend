@@ -18,10 +18,11 @@ public class ApiRootController {
                 "endpoints", List.of(
                         "GET /api/users - List all users",
                         "GET /api/users/{id} - Get user by ID",
-                        "GET /api/recipes - List all recipes (when implemented)",
-                        "GET /api/recipes/{id} - Get recipe by ID (when implemented)",
-                        "GET /api/ingredients - List all ingredients (when implemented)",
-                        "GET /api/ingredients/{id} - Get ingredient by ID (when implemented)"
+                        "GET /api/recipes - List all recipes",
+                        "GET /api/recipes/{id} - Get recipe by ID",
+                        "GET /api/ingredients - List all ingredients ",
+                        "GET /api/ingredients/{id} - Get ingredient by ID ",
+                        "POST /api/ingredients - Add ingredient"
                 ),
                 "_links", Map.of(
                         "self", Map.of("href", "/"),
