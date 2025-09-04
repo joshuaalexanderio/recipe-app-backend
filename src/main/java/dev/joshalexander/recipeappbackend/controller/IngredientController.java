@@ -19,9 +19,9 @@ public class IngredientController {
     }
 
     @GetMapping
-    public ResponseEntity<List<IngredientDTO>> getAllIngredients() {
-        List<IngredientDTO> users = ingredientService.getAllIngredients();
-        return ResponseEntity.ok(users);
+    public ResponseEntity<List<IngredientDTO>> getRecipeIngredients(@PathVariable Long recipeId) {
+        List<IngredientDTO> ingredient = ingredientService.getAllIngredients();
+        return ResponseEntity.ok(ingredient);
     }
 
     @GetMapping("/{ingredientId}")
