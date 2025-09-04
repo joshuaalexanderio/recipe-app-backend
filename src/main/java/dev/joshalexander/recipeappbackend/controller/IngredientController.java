@@ -1,30 +1,33 @@
 package dev.joshalexander.recipeappbackend.controller;
 import dev.joshalexander.recipeappbackend.dto.IngredientDTO;
-import dev.joshalexander.recipeappbackend.dto.UserDTO;
-import dev.joshalexander.recipeappbackend.mapper.EntityMapper;
-import dev.joshalexander.recipeappbackend.repository.IngredientRepository;
-import dev.joshalexander.recipeappbackend.repository.UserRepository;
+import dev.joshalexander.recipeappbackend.service.IngredientService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/ingredients")
 public class IngredientController {
-    private final EntityMapper ingredientMapper;
-    private final IngredientRepository ingredientRepository;
-
-    public IngredientController(EntityMapper ingredientMapper, IngredientRepository ingredientRepository) {
-        this.ingredientMapper = ingredientMapper;
-        this.ingredientRepository = ingredientRepository;
+    private final IngredientService ingredientService;
+    public IngredientController(IngredientService ingredientService) {
+        this.ingredientService = ingredientService;
     }
+
     @GetMapping
-    public List<IngredientDTO> getAllUsers() {
-        return ingredientRepository.findAll()
-                .stream()
-                .map(ingredientMapper::toIngredientDTO)
-                .toList();
+    public ResponseEntity<List<IngredientDTO>> getAllIngredients() {
+        List<IngredientDTO> users = ingredientService.getAllIngredients();
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/{ingredientId}")
+    public ResponseEntity<IngredientDTO> getIngredientById(@PathVariable Long ingredientId) {
+        Optional<IngredientDTO> user = ingredientService.getIngredientById(ingredientId);
+
+        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
