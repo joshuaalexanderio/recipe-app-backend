@@ -7,7 +7,6 @@ import dev.joshalexander.recipeappbackend.entity.Ingredient;
 import dev.joshalexander.recipeappbackend.entity.Recipe;
 import dev.joshalexander.recipeappbackend.entity.User;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface EntityMapper {
