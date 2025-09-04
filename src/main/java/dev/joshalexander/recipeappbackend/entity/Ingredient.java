@@ -24,6 +24,6 @@ public class Ingredient {
     private Integer orderIndex;
 
     @ManyToOne
-    @JoinColumn(name = "recipe_id", nullable = false)
+    @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 }
