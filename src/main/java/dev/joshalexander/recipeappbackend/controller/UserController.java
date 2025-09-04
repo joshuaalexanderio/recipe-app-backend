@@ -1,12 +1,11 @@
 package dev.joshalexander.recipeappbackend.controller;
+
 import dev.joshalexander.recipeappbackend.dto.UserDTO;
-import dev.joshalexander.recipeappbackend.mapper.EntityMapper;
-import dev.joshalexander.recipeappbackend.repository.UserRepository;
+import dev.joshalexander.recipeappbackend.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import dev.joshalexander.recipeappbackend.service.UserService;
-
 
 import java.util.List;
 
@@ -17,8 +16,10 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
     @GetMapping
-    public List<UserDTO> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
     }
 }
