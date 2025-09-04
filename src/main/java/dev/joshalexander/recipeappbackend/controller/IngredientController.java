@@ -22,12 +22,13 @@ public class IngredientController {
     public ResponseEntity<List<IngredientDTO>> getRecipeIngredients(@PathVariable Long recipeId) {
         List<IngredientDTO> ingredient = ingredientService.getAllIngredients();
         return ResponseEntity.ok(ingredient);
+        List<IngredientDTO> ingredients = ingredientService.getRecipeIngredients(recipeId);
     }
 
     @GetMapping("/{ingredientId}")
     public ResponseEntity<IngredientDTO> getIngredientById(@PathVariable Long ingredientId) {
-        Optional<IngredientDTO> user = ingredientService.getIngredientById(ingredientId);
+        Optional<IngredientDTO> ingredient = ingredientService.getIngredientById(ingredientId);
 
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return ingredient.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
