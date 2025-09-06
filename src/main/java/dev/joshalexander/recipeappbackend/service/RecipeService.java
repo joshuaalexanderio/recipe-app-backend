@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface RecipeService {
     List<RecipeDTO> getAllRecipes();
     Optional<RecipeDTO> getRecipeById(Long id);
+    RecipeDTO createRecipe(RecipeDTO recipeDTO);
 }
+

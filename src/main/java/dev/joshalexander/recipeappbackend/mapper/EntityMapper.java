@@ -15,5 +15,5 @@ public interface EntityMapper {
     Ingredient toIngredient(IngredientDTO ingredientDTO);
     UserDTO toUserDTO(User user);
     RecipeDTO toRecipeDTO(Recipe recipe);
-
+    Recipe toRecipe(RecipeDTO recipeDTO);
 }

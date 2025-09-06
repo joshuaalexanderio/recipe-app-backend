@@ -18,4 +18,3 @@ public class RecipeDTO {
     private List<IngredientDTO> ingredients;
 }
 
-

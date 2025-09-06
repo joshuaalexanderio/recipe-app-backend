@@ -1,6 +1,5 @@
 package dev.joshalexander.recipeappbackend.service.impl;
 import dev.joshalexander.recipeappbackend.dto.UserDTO;
-import dev.joshalexander.recipeappbackend.entity.User;
 import dev.joshalexander.recipeappbackend.mapper.EntityMapper;
 import dev.joshalexander.recipeappbackend.repository.UserRepository;
 import dev.joshalexander.recipeappbackend.service.UserService;
