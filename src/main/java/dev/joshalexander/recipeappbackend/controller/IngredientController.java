@@ -1,4 +1,5 @@
 package dev.joshalexander.recipeappbackend.controller;
+
 import dev.joshalexander.recipeappbackend.dto.IngredientDTO;
 import dev.joshalexander.recipeappbackend.service.IngredientService;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import java.util.Optional;
 @RequestMapping("/api/ingredients")
 public class IngredientController {
     private final IngredientService ingredientService;
+
     public IngredientController(IngredientService ingredientService) {
         this.ingredientService = ingredientService;
     }
@@ -29,9 +31,9 @@ public class IngredientController {
         return ingredient.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<IngredientDTO> createIngredient(@RequestBody IngredientDTO ingredientData) {
-        IngredientDTO createdIngredient = ingredientService.createIngredient(ingredientData);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdIngredient);
-    }
+//    @PostMapping
+//    public ResponseEntity<IngredientDTO> createIngredient(@RequestBody IngredientDTO ingredientData) {
+//        IngredientDTO createdIngredient = ingredientService.createIngredient(ingredientData);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(createdIngredient);
+//    }
 }
