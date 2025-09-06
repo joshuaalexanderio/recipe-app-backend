@@ -3,6 +3,7 @@ package dev.joshalexander.recipeappbackend.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +12,11 @@ public class DocsController {
 
     @GetMapping("/docs")
     public Map<String, Object> getDocs() {
-        return Map.of(
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("title", "Recipe App API Documentation");
+        response.put("version", "1.0.0");
+        response.put("baseUrl", "http://localhost:8080/api");
+        response.put("endpoints", Map.of(
                 "title", "Recipe App API Documentation",
                 "version", "1.0.0",
                 "baseUrl", "http://localhost:8080/api",
@@ -47,6 +52,8 @@ public class DocsController {
                                 )
                         )
                 )
-        );
+
+        ));
+        return response;
     }
 }
