@@ -12,21 +12,13 @@ public class ApiRootController {
     @GetMapping("/")
     public Map<String, Object> getApiRoot() {
         return Map.of(
-                "message", "Recipe App API",
+                "title", "Recipe App API",
                 "version", "1.0.0",
-                "endpoints", List.of(
-                        "GET /api/users - List all users",
-                        "GET /api/users/{id} - Get user by ID",
-                        "GET /api/recipes - List all recipes",
-                        "GET /api/recipes/{id} - Get recipe by ID",
-                        "GET /api/ingredients - List all ingredients ",
-                        "GET /api/ingredients/{id} - Get ingredient by ID ",
-                        "POST /api/ingredients - Add ingredient"
-                ),
                 "_links", Map.of(
                         "self", Map.of("href", "/"),
-                        "users", Map.of("href", "/api/users"),
+                        "docs", Map.of("href", "/docs"),
                         "recipes", Map.of("href", "/api/recipes"),
+                        "users", Map.of("href", "/api/users"),
                         "ingredients", Map.of("href", "/api/ingredients")
                 )
         );
