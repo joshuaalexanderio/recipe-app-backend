@@ -1,5 +1,7 @@
 package dev.joshalexander.recipeappbackend.controller;
+
 import dev.joshalexander.recipeappbackend.dto.RecipeDTO;
+import dev.joshalexander.recipeappbackend.dto.RecipeUpdateDTO;
 import dev.joshalexander.recipeappbackend.service.RecipeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +30,20 @@ public class RecipeController {
 
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
     @PostMapping
     public ResponseEntity<RecipeDTO> createRecipe(@RequestBody RecipeDTO recipeDTO) {
         RecipeDTO createdRecipe = recipeService.createRecipe(recipeDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdRecipe);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<RecipeDTO> updateRecipe(
+            @PathVariable Long id,
+            @RequestBody RecipeUpdateDTO updateDTO) {
+
+        RecipeDTO updatedRecipe = recipeService.updateRecipe(id, updateDTO);
+        return ResponseEntity.ok(updatedRecipe);
+    }
+
 }

@@ -1,9 +1,13 @@
 package dev.joshalexander.recipeappbackend.service.impl;
+
 import dev.joshalexander.recipeappbackend.dto.IngredientDTO;
+import dev.joshalexander.recipeappbackend.dto.IngredientUpdateDTO;
 import dev.joshalexander.recipeappbackend.dto.RecipeDTO;
+import dev.joshalexander.recipeappbackend.dto.RecipeUpdateDTO;
 import dev.joshalexander.recipeappbackend.entity.Ingredient;
 import dev.joshalexander.recipeappbackend.entity.Recipe;
 import dev.joshalexander.recipeappbackend.entity.User;
+import dev.joshalexander.recipeappbackend.exception.RecipeNotFoundException;
 import dev.joshalexander.recipeappbackend.mapper.EntityMapper;
 import dev.joshalexander.recipeappbackend.repository.IngredientRepository;
 import dev.joshalexander.recipeappbackend.repository.RecipeRepository;
@@ -85,5 +89,42 @@ public class RecipeServiceImpl implements RecipeService {
     private String findOrCreateIngredientName(String inputName) {
         return ingredientRepository.findDistinctNameIgnoreCase(inputName.trim())
                 .orElse(inputName.trim());
+    }
+
+    @Transactional
+    public RecipeDTO updateRecipe(Long id, RecipeUpdateDTO updateDTO) {
+
+        // Get recipe from repository
+        Recipe existingRecipe = recipeRepository.findById(id)
+                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found with id: " + id));
+
+        // Update fields in existingRecipe if present in updateDTO
+        updateDTO.getName().ifPresent(existingRecipe::setName);
+        updateDTO.getDescription().ifPresent(existingRecipe::setDescription);
+        updateDTO.getRecipeUrl().ifPresent(existingRecipe::setRecipeUrl);
+        updateDTO.getIngredients().ifPresent(ingredientUpdates ->
+                updateIngredients(existingRecipe, ingredientUpdates));
+
+        // Save updated recipe
+        Recipe savedRecipe = recipeRepository.save(existingRecipe);
+        return recipeMapper.toRecipeDTO(savedRecipe);
+    }
+
+    private void updateIngredients(Recipe recipe, List<IngredientUpdateDTO> ingredientUpdates) {
+        recipe.getIngredients().clear();
+
+        for (IngredientUpdateDTO updateDTO : ingredientUpdates) {
+            Ingredient ingredient = new Ingredient();
+
+            updateDTO.getId().ifPresent(ingredient::setId);
+            updateDTO.getName().ifPresent(ingredient::setName);
+            updateDTO.getQuantity().ifPresent(ingredient::setQuantity);
+            updateDTO.getUnit().ifPresent(ingredient::setUnit);
+            updateDTO.getOrderIndex().ifPresent(ingredient::setOrderIndex);
+
+            // Set the recipe relationship
+            ingredient.setRecipe(recipe);
+            recipe.getIngredients().add(ingredient);
+        }
     }
 }
