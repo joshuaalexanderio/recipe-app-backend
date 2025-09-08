@@ -14,21 +14,22 @@ import java.util.Optional;
 @RequestMapping("/api/recipes")
 public class RecipeController {
     private final RecipeService recipeService;
+
     public RecipeController(RecipeService recipeService) {
         this.recipeService = recipeService;
     }
 
     @GetMapping
     public ResponseEntity<List<RecipeDTO>> getAllRecipes() {
-        List<RecipeDTO> users = recipeService.getAllRecipes();
-        return ResponseEntity.ok(users);
+        List<RecipeDTO> recipes = recipeService.getAllRecipes();
+        return ResponseEntity.ok(recipes);
     }
 
     @GetMapping("/{recipeId}")
     public ResponseEntity<RecipeDTO> getRecipeById(@PathVariable Long recipeId) {
-        Optional<RecipeDTO> user = recipeService.getRecipeById(recipeId);
+        Optional<RecipeDTO> recipe = recipeService.getRecipeById(recipeId);
 
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return recipe.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
