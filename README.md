@@ -31,13 +31,33 @@ cd <repo-folder>
 2. Build and start the backend using Docker Compose
 
 ```
-docker-compose up --build
+docker compose up --build
 ```
 
 3. Once started, API will be available at
 
 ```
 http://localhost:8080
+```
+
+## Restarting the Backend
+
+**For most code changes:**
+
+```
+docker compose up --build
+```
+
+**For configuration changes or issues:**
+
+```
+docker compose down && docker compose up --build
+```
+
+**For a clean restart with fresh database:**
+
+```
+docker compose down -v && docker compose up --build
 ```
 
 ## API Endpoints
