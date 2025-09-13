@@ -29,6 +29,11 @@ management:
 
 server:
   port: ${SERVER_PORT:8080}
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on-param
+    include-exception: true
 
 
 # App-specific config

@@ -1,6 +1,7 @@
 package dev.joshalexander.recipeappbackend.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -26,7 +27,10 @@ public class Recipe {
     @Size(max = 2000, message = "Description cannot exceed 2000 characters")
     private String description;
 
+    @Pattern(regexp = "^https?://[^\\s]+$", message = "Recipe URL must be a valid HTTP/HTTPS URL")
     private String recipeUrl;
+
+    private boolean favorite;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

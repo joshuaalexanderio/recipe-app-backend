@@ -1,5 +1,6 @@
 package dev.joshalexander.recipeappbackend.dto;
 
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,8 @@ public class RecipeUpdateDTO {
 
     private Optional<List<IngredientUpdateDTO>> ingredients = Optional.empty();
 
+    private Optional<Boolean> favorite = Optional.empty();
+
 
     public void setName(String name) {
         this.name = name != null ? Optional.of(name) : Optional.empty();
@@ -29,6 +32,7 @@ public class RecipeUpdateDTO {
         this.description = description != null ? Optional.of(description) : Optional.empty();
     }
 
+    @Pattern(regexp = "^https?://[^\\s]+$", message = "Recipe URL must be a valid HTTP/HTTPS URL")
     public void setRecipeUrl(String recipeUrl) {
         this.recipeUrl = recipeUrl != null ? Optional.of(recipeUrl) : Optional.empty();
     }
@@ -36,4 +40,9 @@ public class RecipeUpdateDTO {
     public void setIngredients(List<IngredientUpdateDTO> ingredients) {
         this.ingredients = ingredients != null ? Optional.of(ingredients) : Optional.empty();
     }
+
+    public void setFavorite(Boolean favorite) {
+        this.favorite = favorite != null ? Optional.of(favorite) : Optional.empty();
+    }
+
 }

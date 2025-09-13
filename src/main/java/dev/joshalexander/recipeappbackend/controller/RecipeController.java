@@ -3,6 +3,7 @@ package dev.joshalexander.recipeappbackend.controller;
 import dev.joshalexander.recipeappbackend.dto.RecipeDTO;
 import dev.joshalexander.recipeappbackend.dto.RecipeUpdateDTO;
 import dev.joshalexander.recipeappbackend.service.RecipeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class RecipeController {
     }
 
     @PostMapping
-    public ResponseEntity<RecipeDTO> createRecipe(@RequestBody RecipeDTO recipeDTO) {
+    public ResponseEntity<RecipeDTO> createRecipe(@Valid @RequestBody RecipeDTO recipeDTO) {
         RecipeDTO createdRecipe = recipeService.createRecipe(recipeDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdRecipe);
     }
