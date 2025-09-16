@@ -73,7 +73,7 @@ public class RecipeServiceImpl implements RecipeService {
             Ingredient ingredient = new Ingredient();
             ingredient.setName(normalizedName);
             ingredient.setQuantity(dto.getQuantity());
-            ingredient.setUnit(dto.getUnit());
+            ingredient.setDefaultUnit(dto.getDefaultUnit());
             ingredient.setRecipe(recipe);
             ingredient.setOrderIndex(dto.getOrderIndex());
             ingredients.add(ingredient);
@@ -118,7 +118,7 @@ public class RecipeServiceImpl implements RecipeService {
             updateDTO.getId().ifPresent(ingredient::setId);
             updateDTO.getName().ifPresent(ingredient::setName);
             updateDTO.getQuantity().ifPresent(ingredient::setQuantity);
-            updateDTO.getUnit().ifPresent(ingredient::setUnit);
+            updateDTO.getDefaultUnit().ifPresent(ingredient::setDefaultUnit);
             updateDTO.getOrderIndex().ifPresent(ingredient::setOrderIndex);
 
             // Set the recipe relationship

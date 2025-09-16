@@ -12,7 +12,7 @@ public class IngredientUpdateDTO {
     private Optional<Long> id = Optional.empty();
     private Optional<String> name = Optional.empty();
     private Optional<String> quantity = Optional.empty();
-    private Optional<String> unit = Optional.empty();
+    private Optional<String> defaultUnit = Optional.empty();
     private Optional<Integer> orderIndex = Optional.empty();
 
     public void setId(Long id) {
@@ -27,8 +27,8 @@ public class IngredientUpdateDTO {
         this.quantity = quantity != null ? Optional.of(quantity) : Optional.empty();
     }
 
-    public void setUnit(String unit) {
-        this.unit = unit != null ? Optional.of(unit) : Optional.empty();
+    public void setDefaultUnit(String defaultUnit) {
+        this.defaultUnit = defaultUnit != null ? Optional.of(defaultUnit) : Optional.empty();
     }
 
     public void setOrderIndex(Integer orderIndex) {

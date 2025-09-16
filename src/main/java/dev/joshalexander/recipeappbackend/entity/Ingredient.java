@@ -19,7 +19,7 @@ public class Ingredient {
 
     private String quantity;
 
-    private String unit;
+    private String defaultUnit;
 
     private Integer orderIndex;
 
