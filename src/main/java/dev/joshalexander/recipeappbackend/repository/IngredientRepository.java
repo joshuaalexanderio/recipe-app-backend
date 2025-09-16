@@ -11,8 +11,4 @@ import java.util.Optional;
 
 @Repository
 public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
-
-
-    @Query("SELECT DISTINCT i.name FROM Ingredient i WHERE LOWER(i.name) = LOWER(:name)")
-    Optional<String> findDistinctNameIgnoreCase(@Param("name") String name);
 }

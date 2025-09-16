@@ -68,7 +68,7 @@ public class RecipeServiceImpl implements RecipeService {
         List<Ingredient> ingredients = new ArrayList<>();
 
         for (IngredientDTO dto : recipeDTO.getIngredients()) {
-            String normalizedName = findOrCreateIngredientName(dto.getName());
+            String normalizedName = normalizeName(dto.getName());
 
             Ingredient ingredient = new Ingredient();
             ingredient.setName(normalizedName);
@@ -86,9 +86,8 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeMapper.toRecipeDTO(savedRecipe);
     }
 
-    private String findOrCreateIngredientName(String inputName) {
-        return ingredientRepository.findDistinctNameIgnoreCase(inputName.trim())
-                .orElse(inputName.trim());
+    private String normalizeName(String inputName) {
+        return inputName.trim().toLowerCase();
     }
 
     @Transactional

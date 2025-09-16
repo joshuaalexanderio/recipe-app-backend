@@ -32,6 +32,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
     @Override
     public IngredientDTO createIngredient(IngredientDTO ingredientDTO) {
+        ingredientDTO.setName(ingredientDTO.getName().toLowerCase());
         Ingredient ingredient = ingredientMapper.toIngredient(ingredientDTO);
         Ingredient savedIngredient = ingredientRepository.save(ingredient);
         return ingredientMapper.toIngredientDTO(savedIngredient);
