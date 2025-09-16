@@ -103,7 +103,7 @@ curl -X POST http://localhost:8080/api/recipes \
     "ingredients": [
       {"name": "pasta", "quantity": "1", "unit": "lb", "orderIndex": 1},
       {"name": "marinara sauce", "quantity": "2", "unit": "cups", "orderIndex": 2},
-      {"name": "parmesan cheese", "quantity": "1/2", "unit": "cup", "orderIndex": 3}
+      {"name": "parmesan cheese", "quantity": "1/2", "unit": "cup", "orderIndex": 3},
     ]
   }'
 ```
@@ -125,7 +125,16 @@ curl -X PUT http://localhost:8080/api/recipes/1 \
   -u user:password \
   -d '{
     "name": "New Recipe Name",
-    "description": "Updated description"
+    "description": "Updated description",
+    "favorite": true
+  }'
+
+# Mark recipe as favorite
+curl -X PUT http://localhost:8080/api/recipes/1 \
+  -H "Content-Type: application/json" \
+  -u user:password \
+  -d '{
+    "favorite": true
   }'
 
 # Replace entire ingredients list
