@@ -102,6 +102,7 @@ public class RecipeServiceImpl implements RecipeService {
         updateDTO.getRecipeUrl().ifPresent(existingRecipe::setRecipeUrl);
         updateDTO.getIngredients().ifPresent(ingredientUpdates ->
                 updateIngredients(existingRecipe, ingredientUpdates));
+        updateDTO.getFavorite().ifPresent(existingRecipe::setFavorite);
 
         // Save updated recipe
         Recipe savedRecipe = recipeRepository.save(existingRecipe);
