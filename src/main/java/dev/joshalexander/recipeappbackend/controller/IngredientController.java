@@ -30,6 +30,16 @@ public class IngredientController {
 
         return ingredient.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+    @PostMapping
+    public ResponseEntity<IngredientDTO> createIngredient(@RequestBody IngredientDTO ingredientDTO) {
+        IngredientDTO ingredient = ingredientService.createIngredient(ingredientDTO);
+        return ResponseEntity.ok(ingredient);
+    }
+    @PutMapping("/{ingredientId}")
+    public ResponseEntity<IngredientDTO> updateIngredient(@PathVariable Long ingredientId, @RequestBody IngredientUpdateDTO updateDTO) {
+            IngredientDTO ingredient = ingredientService.updateIngredient(ingredientId, updateDTO);
+            return ResponseEntity.ok(ingredient);
+        }
 
 //    @PostMapping
 //    public ResponseEntity<IngredientDTO> createIngredient(@RequestBody IngredientDTO ingredientData) {

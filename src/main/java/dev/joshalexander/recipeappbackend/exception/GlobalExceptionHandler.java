@@ -34,7 +34,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    // Add this new handler
     @ExceptionHandler(RecipeNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleRecipeNotFound(
             RecipeNotFoundException ex) {
@@ -47,4 +46,16 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, Object>> handleIngredientNotFound(IngredientNotFoundException ex) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("timestamp", Instant.now().toString());
+        response.put("status", 404);
+        response.put("error", "Ingredient Not Found");
+        response.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
 }

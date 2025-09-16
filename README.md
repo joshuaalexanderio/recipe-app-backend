@@ -77,6 +77,9 @@ http://localhost:8080/api
 
 - `GET /ingredients` - List all ingredients
 - `GET /ingredients/{id}` - Get ingredient by ID
+- `POST /ingredients` - Create ingredient
+- `PUT /ingredients/{id}` - Update ingredient
+- `DELETE /ingredients` - Delete ingredient
 
 ### Users
 
@@ -148,6 +151,29 @@ curl -X PUT http://localhost:8080/api/recipes/1 \
     ]
   }'
 ```
+### Create an ingredient
+
+```bash
+curl -X POST http://localhost:8080/api/ingredients \
+  -H "Content-Type: application/json" \
+  -u user:password \
+  -d '{
+    "name": "olive oil",
+    "quantity": "1",
+    "defaultUnit": "tbsp"
+  }'
+```
+### Update an ingredient
+```bash
+curl -X PUT http://localhost:8080/api/ingredients/9 \
+    -H "Content-Type: application/json" \
+    -u user:password \
+    -d '{
+    "name": "extra virgin olive oil",
+    "quantity": "3",
+    }'
+```
+    
 
 ## Update Notes
 
