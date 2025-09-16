@@ -12,6 +12,5 @@ public class IngredientDTO {
     private String name;
     private String quantity;
     private String defaultUnit;
-    private Integer orderIndex;
 }
 

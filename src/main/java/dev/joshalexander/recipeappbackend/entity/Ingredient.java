@@ -21,8 +21,6 @@ public class Ingredient {
 
     private String defaultUnit;
 
-    private Integer orderIndex;
-
     @ManyToOne
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;

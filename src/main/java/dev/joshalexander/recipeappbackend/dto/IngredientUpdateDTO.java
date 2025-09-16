@@ -30,8 +30,4 @@ public class IngredientUpdateDTO {
     public void setDefaultUnit(String defaultUnit) {
         this.defaultUnit = defaultUnit != null ? Optional.of(defaultUnit) : Optional.empty();
     }
-
-    public void setOrderIndex(Integer orderIndex) {
-        this.orderIndex = orderIndex != null ? Optional.of(orderIndex) : Optional.empty();
-    }
 }
