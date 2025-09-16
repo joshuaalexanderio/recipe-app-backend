@@ -57,6 +57,7 @@ public class RecipeServiceImpl implements RecipeService {
         recipe.setName(recipeDTO.getName());
         recipe.setDescription(recipeDTO.getDescription());
         recipe.setRecipeUrl(recipeDTO.getRecipeUrl());
+        recipe.setFavorite(recipeDTO.isFavorite());
 
         // Find existing user by ID
         User user = userRepository.findById(recipeDTO.getUser().getId())
