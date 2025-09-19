@@ -17,8 +17,6 @@ public class Ingredient {
     @Column(nullable = false)
     private String name;
 
-    private String quantity;
-
     private String defaultUnit;
 
     @ManyToOne

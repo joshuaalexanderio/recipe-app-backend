@@ -23,10 +23,6 @@ public class IngredientUpdateDTO {
         this.name = name != null ? Optional.of(name) : Optional.empty();
     }
 
-    public void setQuantity(String quantity) {
-        this.quantity = quantity != null ? Optional.of(quantity) : Optional.empty();
-    }
-
     public void setDefaultUnit(String defaultUnit) {
         this.defaultUnit = defaultUnit != null ? Optional.of(defaultUnit) : Optional.empty();
     }
