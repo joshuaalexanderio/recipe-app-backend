@@ -17,6 +17,7 @@ public class RecipeUpdateDTO {
     @Size(max = 2000, message = "Description cannot exceed 2000 characters")
     private Optional<String> description = Optional.empty();
 
+    @Pattern(regexp = "^https?://[^\\s]+$", message = "Recipe URL must be a valid HTTP/HTTPS URL")
     private Optional<String> recipeUrl = Optional.empty();
 
     private Optional<List<RecipeIngredientUpdateDTO>> recipeIngredients = Optional.empty();
@@ -32,7 +33,6 @@ public class RecipeUpdateDTO {
         this.description = description != null ? Optional.of(description) : Optional.empty();
     }
 
-    @Pattern(regexp = "^https?://[^\\s]+$", message = "Recipe URL must be a valid HTTP/HTTPS URL")
     public void setRecipeUrl(String recipeUrl) {
         this.recipeUrl = recipeUrl != null ? Optional.of(recipeUrl) : Optional.empty();
     }
