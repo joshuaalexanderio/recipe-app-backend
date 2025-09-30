@@ -1,7 +1,22 @@
 # Recipe App Backend API
 
-A Spring Boot REST API for managing recipes with ingredients. Supports creating recipes, managing users, and future
-integration with Todoist for shopping lists.
+A Spring Boot REST API for managing recipes and ingredients, providing the backend for the [Recipe App Frontend](https://github.com/stopthink/recipe-app-frontend).
+
+## Features
+
+- 📝 Create and manage recipes with ingredients
+- 🔗 Auto-import recipes from URLs
+- 👤 User authentication and management
+- ⭐ Favorite recipes
+- 📦 RESTful API with comprehensive documentation
+- 🛒 Todoist integration for one-click shopping lists *(coming soon)*
+
+## Tech Stack
+
+- Java 17+ / Spring Boot
+- PostgreSQL (via Docker)
+- Spring Data JPA
+- Docker Compose for easy setup
 
 ## Prerequisites
 
