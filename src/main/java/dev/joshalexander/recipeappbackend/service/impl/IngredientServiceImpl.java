@@ -19,21 +19,25 @@ public class IngredientServiceImpl implements IngredientService {
         this.ingredientRepository = ingredientRepository;
         this.ingredientMapper = ingredientMapper;
     }
+
     public List<IngredientDTO> getAllIngredients() {
         return ingredientRepository.findAll()
                 .stream()
                 .map(ingredientMapper::toIngredientDTO)
                 .toList();
     }
+
     @Override
     public Optional<IngredientDTO> getIngredientById(Long id) {
         return ingredientRepository.findById(id)
                 .map(ingredientMapper::toIngredientDTO);
     }
+
     @Override
     public IngredientDTO createIngredient(IngredientDTO ingredientDTO) {
         Ingredient ingredient = ingredientMapper.toIngredient(ingredientDTO);
         Ingredient savedIngredient = ingredientRepository.save(ingredient);
         return ingredientMapper.toIngredientDTO(savedIngredient);
     }
+    
 }
