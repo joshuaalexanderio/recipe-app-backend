@@ -2,8 +2,10 @@ package dev.joshalexander.recipeappbackend.config;
 
 import dev.joshalexander.recipeappbackend.entity.Ingredient;
 import dev.joshalexander.recipeappbackend.entity.Recipe;
+import dev.joshalexander.recipeappbackend.entity.RecipeIngredient;
 import dev.joshalexander.recipeappbackend.entity.User;
 import dev.joshalexander.recipeappbackend.repository.IngredientRepository;
+import dev.joshalexander.recipeappbackend.repository.RecipeIngredientRepository;
 import dev.joshalexander.recipeappbackend.repository.RecipeRepository;
 import dev.joshalexander.recipeappbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,401 +25,151 @@ public class BootStrapData implements CommandLineRunner {
     RecipeRepository recipeRepository;
     @Autowired
     IngredientRepository ingredientRepository;
+    @Autowired
+    RecipeIngredientRepository recipeIngredientRepository;
 
     @Override
     public void run(String... args) throws Exception {
         if (userRepository.count() == 0) {
             // Create test user
-            var user = new User();
+            User user = new User();
             user.setTodoistUserId("bootstrap123");
             user.setTodoistAccessToken("fake_token_abc123");
             user.setName("Joshua Alexander");
             user.setEmail("joshuaalexandertb@gmail.com");
             User savedUser = userRepository.save(user);
 
-            // Create test recipe
-            Recipe recipe = new Recipe();
-            recipe.setName("One Pan Egg Sandwich");
-            recipe.setDescription("Breakfast sandwich made in one pan by Kenji López-Alt");
-            recipe.setRecipeUrl("https://www.youtube.com/watch?v=zIfxBh0RF30&t=33s&ab_channel=J.KenjiL%C3%B3pez-Alt");
-            recipe.setUser(savedUser);
-            Recipe savedRecipe = recipeRepository.save(recipe);
+            // Create master ingredient catalog in batch
+            List<Ingredient> masterIngredients = createMasterIngredients();
+            ingredientRepository.saveAll(masterIngredients);
 
-            // Create ingredients
-
-            Ingredient oliveOil = new Ingredient();
-            oliveOil.setName("olive oil");
-            oliveOil.setQuantity("1");
-            oliveOil.setUnit("tbsp");
-            oliveOil.setOrderIndex(1);
-            oliveOil.setRecipe(savedRecipe);
-
-            Ingredient allPurposeFlour = new Ingredient();
-            allPurposeFlour.setName("all purpose flour");
-            allPurposeFlour.setQuantity("1");
-            allPurposeFlour.setUnit("cup");
-            allPurposeFlour.setOrderIndex(1);
-            allPurposeFlour.setRecipe(savedRecipe);
-
-            Ingredient butter = new Ingredient();
-            butter.setName("butter");
-            butter.setQuantity("1");
-            butter.setUnit("tbsp");
-            butter.setOrderIndex(1);
-            butter.setRecipe(savedRecipe);
-
-            Ingredient chicken = new Ingredient();
-            chicken.setName("chicken");
-            chicken.setQuantity("1");
-            chicken.setUnit("lb");
-            chicken.setOrderIndex(1);
-            chicken.setRecipe(savedRecipe);
-
-            Ingredient sugar = new Ingredient();
-            sugar.setName("sugar");
-            sugar.setQuantity("1");
-            sugar.setUnit("cup");
-            sugar.setOrderIndex(1);
-            sugar.setRecipe(savedRecipe);
-
-            Ingredient salt = new Ingredient();
-            salt.setName("salt");
-            salt.setQuantity("1");
-            salt.setUnit("tsp");
-            salt.setOrderIndex(1);
-            salt.setRecipe(savedRecipe);
-
-            Ingredient egg = new Ingredient();
-            egg.setName("egg");
-            egg.setQuantity("1");
-            egg.setUnit("large");
-            egg.setOrderIndex(1);
-            egg.setRecipe(savedRecipe);
-
-            Ingredient rice = new Ingredient();
-            rice.setName("rice");
-            rice.setQuantity("1");
-            rice.setUnit("cup");
-            rice.setOrderIndex(1);
-            rice.setRecipe(savedRecipe);
-
-            Ingredient vegetableOil = new Ingredient();
-            vegetableOil.setName("vegetable oil");
-            vegetableOil.setQuantity("1");
-            vegetableOil.setUnit("tbsp");
-            vegetableOil.setOrderIndex(1);
-            vegetableOil.setRecipe(savedRecipe);
-
-            Ingredient pork = new Ingredient();
-            pork.setName("pork");
-            pork.setQuantity("1");
-            pork.setUnit("lb");
-            pork.setOrderIndex(1);
-            pork.setRecipe(savedRecipe);
-
-            Ingredient beef = new Ingredient();
-            beef.setName("beef");
-            beef.setQuantity("1");
-            beef.setUnit("lb");
-            beef.setOrderIndex(1);
-            beef.setRecipe(savedRecipe);
-
-            Ingredient cheese = new Ingredient();
-            cheese.setName("cheese");
-            cheese.setQuantity("1");
-            cheese.setUnit("cup");
-            cheese.setOrderIndex(1);
-            cheese.setRecipe(savedRecipe);
-
-            Ingredient garlic = new Ingredient();
-            garlic.setName("garlic");
-            garlic.setQuantity("1");
-            garlic.setUnit("clove");
-            garlic.setOrderIndex(1);
-            garlic.setRecipe(savedRecipe);
-
-            Ingredient onion = new Ingredient();
-            onion.setName("onion");
-            onion.setQuantity("1");
-            onion.setUnit("medium");
-            onion.setOrderIndex(1);
-            onion.setRecipe(savedRecipe);
-
-            Ingredient wholeMilk = new Ingredient();
-            wholeMilk.setName("whole milk");
-            wholeMilk.setQuantity("1");
-            wholeMilk.setUnit("cup");
-            wholeMilk.setOrderIndex(1);
-            wholeMilk.setRecipe(savedRecipe);
-
-            Ingredient blackPepper = new Ingredient();
-            blackPepper.setName("black pepper");
-            blackPepper.setQuantity("1");
-            blackPepper.setUnit("tsp");
-            blackPepper.setOrderIndex(1);
-            blackPepper.setRecipe(savedRecipe);
-
-            Ingredient tomatoes = new Ingredient();
-            tomatoes.setName("tomatoes");
-            tomatoes.setQuantity("1");
-            tomatoes.setUnit("can");
-            tomatoes.setOrderIndex(1);
-            tomatoes.setRecipe(savedRecipe);
-
-            Ingredient lemonJuice = new Ingredient();
-            lemonJuice.setName("lemon juice");
-            lemonJuice.setQuantity("1");
-            lemonJuice.setUnit("tbsp");
-            lemonJuice.setOrderIndex(1);
-            lemonJuice.setRecipe(savedRecipe);
-
-            Ingredient vanillaExtract = new Ingredient();
-            vanillaExtract.setName("vanilla extract");
-            vanillaExtract.setQuantity("1");
-            vanillaExtract.setUnit("tsp");
-            vanillaExtract.setOrderIndex(1);
-            vanillaExtract.setRecipe(savedRecipe);
-
-            Ingredient bakingPowder = new Ingredient();
-            bakingPowder.setName("baking powder");
-            bakingPowder.setQuantity("1");
-            bakingPowder.setUnit("tsp");
-            bakingPowder.setOrderIndex(1);
-            bakingPowder.setRecipe(savedRecipe);
-
-            Ingredient pasta = new Ingredient();
-            pasta.setName("pasta");
-            pasta.setQuantity("1");
-            pasta.setUnit("lb");
-            pasta.setOrderIndex(1);
-            pasta.setRecipe(savedRecipe);
-
-            Ingredient potatoes = new Ingredient();
-            potatoes.setName("potatoes");
-            potatoes.setQuantity("1");
-            potatoes.setUnit("lb");
-            potatoes.setOrderIndex(1);
-            potatoes.setRecipe(savedRecipe);
-
-            Ingredient carrots = new Ingredient();
-            carrots.setName("carrots");
-            carrots.setQuantity("1");
-            carrots.setUnit("medium");
-            carrots.setOrderIndex(1);
-            carrots.setRecipe(savedRecipe);
-
-            Ingredient celery = new Ingredient();
-            celery.setName("celery");
-            celery.setQuantity("1");
-            celery.setUnit("stalk");
-            celery.setOrderIndex(1);
-            celery.setRecipe(savedRecipe);
-
-            Ingredient bellPeppers = new Ingredient();
-            bellPeppers.setName("bell peppers");
-            bellPeppers.setQuantity("1");
-            bellPeppers.setUnit("medium");
-            bellPeppers.setOrderIndex(1);
-            bellPeppers.setRecipe(savedRecipe);
-
-            Ingredient mushrooms = new Ingredient();
-            mushrooms.setName("mushrooms");
-            mushrooms.setQuantity("1");
-            mushrooms.setUnit("cup");
-            mushrooms.setOrderIndex(1);
-            mushrooms.setRecipe(savedRecipe);
-
-            Ingredient bacon = new Ingredient();
-            bacon.setName("bacon");
-            bacon.setQuantity("1");
-            bacon.setUnit("slice");
-            bacon.setOrderIndex(1);
-            bacon.setRecipe(savedRecipe);
-
-            Ingredient heavyCream = new Ingredient();
-            heavyCream.setName("heavy cream");
-            heavyCream.setQuantity("1");
-            heavyCream.setUnit("cup");
-            heavyCream.setOrderIndex(1);
-            heavyCream.setRecipe(savedRecipe);
-
-            Ingredient chickenStock = new Ingredient();
-            chickenStock.setName("chicken stock");
-            chickenStock.setQuantity("1");
-            chickenStock.setUnit("cup");
-            chickenStock.setOrderIndex(1);
-            chickenStock.setRecipe(savedRecipe);
-
-            Ingredient groundBeef = new Ingredient();
-            groundBeef.setName("ground beef");
-            groundBeef.setQuantity("1");
-            groundBeef.setUnit("lb");
-            groundBeef.setOrderIndex(1);
-            groundBeef.setRecipe(savedRecipe);
-
-            Ingredient paprika = new Ingredient();
-            paprika.setName("paprika");
-            paprika.setQuantity("1");
-            paprika.setUnit("tsp");
-            paprika.setOrderIndex(1);
-            paprika.setRecipe(savedRecipe);
-
-            Ingredient cumin = new Ingredient();
-            cumin.setName("cumin");
-            cumin.setQuantity("1");
-            cumin.setUnit("tsp");
-            cumin.setOrderIndex(1);
-            cumin.setRecipe(savedRecipe);
-
-            Ingredient oregano = new Ingredient();
-            oregano.setName("oregano");
-            oregano.setQuantity("1");
-            oregano.setUnit("tsp");
-            oregano.setOrderIndex(1);
-            oregano.setRecipe(savedRecipe);
-
-            Ingredient basil = new Ingredient();
-            basil.setName("basil");
-            basil.setQuantity("1");
-            basil.setUnit("tsp");
-            basil.setOrderIndex(1);
-            basil.setRecipe(savedRecipe);
-
-            Ingredient thyme = new Ingredient();
-            thyme.setName("thyme");
-            thyme.setQuantity("1");
-            thyme.setUnit("tsp");
-            thyme.setOrderIndex(1);
-            thyme.setRecipe(savedRecipe);
-
-            Ingredient parsley = new Ingredient();
-            parsley.setName("parsley");
-            parsley.setQuantity("1");
-            parsley.setUnit("tbsp");
-            parsley.setOrderIndex(1);
-            parsley.setRecipe(savedRecipe);
-
-            Ingredient cinnamon = new Ingredient();
-            cinnamon.setName("cinnamon");
-            cinnamon.setQuantity("1");
-            cinnamon.setUnit("tsp");
-            cinnamon.setOrderIndex(1);
-            cinnamon.setRecipe(savedRecipe);
-
-            Ingredient ginger = new Ingredient();
-            ginger.setName("ginger");
-            ginger.setQuantity("1");
-            ginger.setUnit("tsp");
-            ginger.setOrderIndex(1);
-            ginger.setRecipe(savedRecipe);
-
-            Ingredient redPepperFlakes = new Ingredient();
-            redPepperFlakes.setName("red pepper flakes");
-            redPepperFlakes.setQuantity("1");
-            redPepperFlakes.setUnit("tsp");
-            redPepperFlakes.setOrderIndex(1);
-            redPepperFlakes.setRecipe(savedRecipe);
-
-            Ingredient lemon = new Ingredient();
-            lemon.setName("lemon");
-            lemon.setQuantity("1");
-            lemon.setUnit("whole");
-            lemon.setOrderIndex(1);
-            lemon.setRecipe(savedRecipe);
-
-            Ingredient spinach = new Ingredient();
-            spinach.setName("spinach");
-            spinach.setQuantity("1");
-            spinach.setUnit("cup");
-            spinach.setOrderIndex(1);
-            spinach.setRecipe(savedRecipe);
-
-            Ingredient broccoli = new Ingredient();
-            broccoli.setName("broccoli");
-            broccoli.setQuantity("1");
-            broccoli.setUnit("head");
-            broccoli.setOrderIndex(1);
-            broccoli.setRecipe(savedRecipe);
-
-            Ingredient groundTurkey = new Ingredient();
-            groundTurkey.setName("ground turkey");
-            groundTurkey.setQuantity("1");
-            groundTurkey.setUnit("lb");
-            groundTurkey.setOrderIndex(1);
-            groundTurkey.setRecipe(savedRecipe);
-
-            Ingredient sourCream = new Ingredient();
-            sourCream.setName("sour cream");
-            sourCream.setQuantity("1");
-            sourCream.setUnit("cup");
-            sourCream.setOrderIndex(1);
-            sourCream.setRecipe(savedRecipe);
-
-            Ingredient mayonnaise = new Ingredient();
-            mayonnaise.setName("mayonnaise");
-            mayonnaise.setQuantity("1");
-            mayonnaise.setUnit("tbsp");
-            mayonnaise.setOrderIndex(1);
-            mayonnaise.setRecipe(savedRecipe);
-
-            Ingredient shrimp = new Ingredient();
-            shrimp.setName("shrimp");
-            shrimp.setQuantity("1");
-            shrimp.setUnit("lb");
-            shrimp.setOrderIndex(1);
-            shrimp.setRecipe(savedRecipe);
-
-            Ingredient salmon = new Ingredient();
-            salmon.setName("salmon");
-            salmon.setQuantity("1");
-            salmon.setUnit("fillet");
-            salmon.setOrderIndex(1);
-            salmon.setRecipe(savedRecipe);
-
-            Ingredient cheddarCheese = new Ingredient();
-            cheddarCheese.setName("cheddar cheese");
-            cheddarCheese.setQuantity("1");
-            cheddarCheese.setUnit("cup");
-            cheddarCheese.setOrderIndex(1);
-            cheddarCheese.setRecipe(savedRecipe);
-
-            Ingredient parmesanCheese = new Ingredient();
-            parmesanCheese.setName("parmesan cheese");
-            parmesanCheese.setQuantity("1");
-            parmesanCheese.setUnit("cup");
-            parmesanCheese.setOrderIndex(1);
-            parmesanCheese.setRecipe(savedRecipe);
-
-            Ingredient breadCrumbs = new Ingredient();
-            breadCrumbs.setName("bread crumbs");
-            breadCrumbs.setQuantity("1");
-            breadCrumbs.setUnit("cup");
-            breadCrumbs.setOrderIndex(1);
-            breadCrumbs.setRecipe(savedRecipe);
-
-            Ingredient brownSugar = new Ingredient();
-            brownSugar.setName("brown sugar");
-            brownSugar.setQuantity("1");
-            brownSugar.setUnit("cup");
-            brownSugar.setOrderIndex(1);
-            brownSugar.setRecipe(savedRecipe);
-
-            // Save all ingredients to the database
-            List<Ingredient> ingredients = Arrays.asList(
-                    oliveOil, allPurposeFlour, butter, chicken, sugar, salt, egg, rice,
-                    vegetableOil, pork, beef, cheese, garlic, onion, wholeMilk, blackPepper,
-                    tomatoes, lemonJuice, vanillaExtract, bakingPowder, pasta, potatoes,
-                    carrots, celery, bellPeppers, mushrooms, bacon, heavyCream, chickenStock,
-                    groundBeef, paprika, cumin, oregano, basil, thyme, parsley, cinnamon,
-                    ginger, redPepperFlakes, lemon, spinach, broccoli, groundTurkey,
-                    sourCream, mayonnaise, shrimp, salmon, cheddarCheese, parmesanCheese,
-                    breadCrumbs, brownSugar
-            );
-            ingredientRepository.saveAll(ingredients);
-            // Instead of saving ingredients individually
-            ingredientRepository.saveAll(ingredients);
-
+            // Create sample recipe with RecipeIngredients
+            createSampleRecipe(savedUser);
         }
+    }
 
+    private List<Ingredient> createMasterIngredients() {
+        String[][] ingredientData = {
+                {"cayenne pepper", "tsp"},
+                {"nutmeg", "tsp"},
+                {"bacon", "slice"},
+                {"chili powder", "tsp"},
+                {"cornstarch", "tbsp"},
+                {"worcestershire sauce", "tbsp"},
+                {"chicken broth", "cup"},
+                {"paprika", "tsp"},
+                {"potato", "medium"},
+                {"mayonnaise", "tbsp"},
+                {"soy sauce", "tbsp"},
+                {"cheddar cheese", "cup"},
+                {"celery", "stalk"},
+                {"cream cheese", "oz"},
+                {"honey", "tbsp"},
+                {"sour cream", "cup"},
+                {"carrot", "medium"},
+                {"baking soda", "tsp"},
+                {"parsley", "tbsp"},
+                {"parmesan cheese", "cup"},
+                {"lemon", "whole"},
+                {"cinnamon", "tsp"},
+                {"vanilla", "tsp"},
+                {"milk", "cup"},
+                {"baking powder", "tsp"},
+                {"garlic", "clove"},
+                {"flour", "cup"},
+                {"onion", "medium"},
+                {"egg", "large"},
+                {"butter", "tbsp"},
+                {"canadian bacon", "slice"},
+                {"green onion", "stalk"},
+                {"english muffin", "whole"},
+                {"jalapeno", "whole"}
+        };
+
+        return Arrays.stream(ingredientData)
+                .map(data -> {
+                    Ingredient ingredient = new Ingredient();
+                    ingredient.setName(data[0]);
+                    ingredient.setDefaultUnit(data[1]);
+                    return ingredient;
+                })
+                .toList();
+    }
+
+    private void createSampleRecipe(User user) {
+        Recipe recipe = new Recipe();
+        recipe.setName("One Pan Egg Sandwich");
+        recipe.setDescription("Breakfast sandwich made in one pan by Kenji López-Alt");
+        recipe.setRecipeUrl("https://www.youtube.com/watch?v=zIfxBh0RF30");
+        recipe.setUser(user);
+
+        // Get ingredients from database
+        Ingredient egg = ingredientRepository.findByNameIgnoreCase("egg").orElseThrow();
+        Ingredient canadianBacon = ingredientRepository.findByNameIgnoreCase("canadian bacon").orElseThrow();
+        Ingredient greenOnion = ingredientRepository.findByNameIgnoreCase("green onion").orElseThrow();
+        Ingredient butter = ingredientRepository.findByNameIgnoreCase("butter").orElseThrow();
+        Ingredient englishMuffin = ingredientRepository.findByNameIgnoreCase("english muffin").orElseThrow();
+        Ingredient cheddarCheese = ingredientRepository.findByNameIgnoreCase("cheddar cheese").orElseThrow();
+        Ingredient jalapeno = ingredientRepository.findByNameIgnoreCase("jalapeno").orElseThrow();
+
+        // Create RecipeIngredients
+        RecipeIngredient ri1 = new RecipeIngredient();
+        ri1.setName("egg");
+        ri1.setQuantity(2);
+        ri1.setUnit("large");
+        ri1.setOrderIndex(1);
+        ri1.setIngredient(egg);
+        ri1.setRecipe(recipe);
+
+        RecipeIngredient ri2 = new RecipeIngredient();
+        ri2.setName("canadian bacon");
+        ri2.setQuantity(2);
+        ri2.setUnit("slices");
+        ri2.setOrderIndex(2);
+        ri2.setIngredient(canadianBacon);
+        ri2.setRecipe(recipe);
+
+        RecipeIngredient ri3 = new RecipeIngredient();
+        ri3.setName("green onion");
+        ri3.setQuantity(1 / 2);
+        ri3.setUnit("stalk");
+        ri3.setOrderIndex(3);
+        ri3.setIngredient(greenOnion);
+        ri3.setRecipe(recipe);
+
+        RecipeIngredient ri4 = new RecipeIngredient();
+        ri4.setName("butter");
+        ri4.setQuantity(1);
+        ri4.setUnit("tbsp");
+        ri4.setOrderIndex(4);
+        ri4.setIngredient(butter);
+        ri4.setRecipe(recipe);
+
+        RecipeIngredient ri5 = new RecipeIngredient();
+        ri5.setName("english muffin");
+        ri5.setQuantity(1);
+        ri5.setUnit("whole");
+        ri5.setOrderIndex(5);
+        ri5.setIngredient(englishMuffin);
+        ri5.setRecipe(recipe);
+
+        RecipeIngredient ri6 = new RecipeIngredient();
+        ri6.setName("cheddar cheese");
+        ri6.setQuantity(1);
+        ri6.setUnit("oz");
+        ri6.setOrderIndex(6);
+        ri6.setIngredient(cheddarCheese);
+        ri6.setRecipe(recipe);
+
+        RecipeIngredient ri7 = new RecipeIngredient();
+        ri7.setName("jalapeno");
+        ri7.setQuantity(1);
+        ri7.setUnit("whole");
+        ri7.setOrderIndex(7);
+        ri7.setIngredient(jalapeno);
+        ri7.setRecipe(recipe);
+
+        recipe.setRecipeIngredients(Arrays.asList(ri1, ri2, ri3, ri4, ri5, ri6, ri7));
+        recipeRepository.save(recipe);
     }
 }
