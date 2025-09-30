@@ -18,6 +18,6 @@ public class RecipeDTO {
     private String recipeUrl;
     private UserDTO user;
     private boolean favorite;
-    private List<IngredientDTO> ingredients;
+    private List<RecipeIngredientDTO> recipeIngredients;
 }
 

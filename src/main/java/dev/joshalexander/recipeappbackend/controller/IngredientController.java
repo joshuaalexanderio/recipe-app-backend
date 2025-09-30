@@ -31,9 +31,9 @@ public class IngredientController {
         return ingredient.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-//    @PostMapping
-//    public ResponseEntity<IngredientDTO> createIngredient(@RequestBody IngredientDTO ingredientData) {
-//        IngredientDTO createdIngredient = ingredientService.createIngredient(ingredientData);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(createdIngredient);
-//    }
+    @PostMapping
+    public ResponseEntity<IngredientDTO> createIngredient(@RequestBody IngredientDTO ingredientData) {
+        IngredientDTO createdIngredient = ingredientService.createIngredient(ingredientData);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdIngredient);
+    }
 }

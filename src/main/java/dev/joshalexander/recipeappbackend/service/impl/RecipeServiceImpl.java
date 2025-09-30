@@ -1,12 +1,11 @@
 package dev.joshalexander.recipeappbackend.service.impl;
 
-import dev.joshalexander.recipeappbackend.dto.IngredientDTO;
-import dev.joshalexander.recipeappbackend.dto.IngredientUpdateDTO;
-import dev.joshalexander.recipeappbackend.dto.RecipeDTO;
-import dev.joshalexander.recipeappbackend.dto.RecipeUpdateDTO;
+import dev.joshalexander.recipeappbackend.dto.*;
 import dev.joshalexander.recipeappbackend.entity.Ingredient;
 import dev.joshalexander.recipeappbackend.entity.Recipe;
+import dev.joshalexander.recipeappbackend.entity.RecipeIngredient;
 import dev.joshalexander.recipeappbackend.entity.User;
+import dev.joshalexander.recipeappbackend.exception.IngredientNotFoundException;
 import dev.joshalexander.recipeappbackend.exception.RecipeNotFoundException;
 import dev.joshalexander.recipeappbackend.mapper.EntityMapper;
 import dev.joshalexander.recipeappbackend.repository.IngredientRepository;
@@ -14,9 +13,9 @@ import dev.joshalexander.recipeappbackend.repository.RecipeRepository;
 import dev.joshalexander.recipeappbackend.repository.UserRepository;
 import dev.joshalexander.recipeappbackend.service.RecipeService;
 import jakarta.transaction.Transactional;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,32 +62,50 @@ public class RecipeServiceImpl implements RecipeService {
                 .orElseThrow(() -> new RuntimeException("User with ID " +
                         recipeDTO.getUser().getId() + " not found"));
         recipe.setUser(user);
+        for (RecipeIngredientDTO recipeIngredientDTO : recipeDTO.getRecipeIngredients()) {
+            // Find existing Ingredient or create a new one
+            String ingredientName = findOrCreateIngredientByName(recipeIngredientDTO);
 
-        // Handle ingredients with normalized names
-        List<Ingredient> ingredients = new ArrayList<>();
+            // Grab ingredient
+            Ingredient ingredient = ingredientRepository.findByNameIgnoreCase(ingredientName)
+                    .orElseThrow(() -> new IngredientNotFoundException("Ingredient with name '" + ingredientName + "' not found"));
 
-        for (IngredientDTO dto : recipeDTO.getIngredients()) {
-            String normalizedName = findOrCreateIngredientName(dto.getName());
-
-            Ingredient ingredient = new Ingredient();
-            ingredient.setName(normalizedName);
-            ingredient.setQuantity(dto.getQuantity());
-            ingredient.setUnit(dto.getUnit());
-            ingredient.setRecipe(recipe);
-            ingredient.setOrderIndex(dto.getOrderIndex());
-            ingredients.add(ingredient);
+            // Create RecipeIngredient attached to the Ingredient
+            RecipeIngredient recipeIngredient = getRecipeIngredient(recipeIngredientDTO, ingredient, recipe);
+            recipe.getRecipeIngredients().add(recipeIngredient);
         }
-
-        recipe.setIngredients(ingredients);
-
-        // Save and convert back to DTO
+        // Save, cascade will handle RecipeIngredients
         Recipe savedRecipe = recipeRepository.save(recipe);
         return recipeMapper.toRecipeDTO(savedRecipe);
     }
 
-    private String findOrCreateIngredientName(String inputName) {
-        return ingredientRepository.findDistinctNameIgnoreCase(inputName.trim())
-                .orElse(inputName.trim());
+    private static @NotNull RecipeIngredient getRecipeIngredient(RecipeIngredientDTO recipeIngredientDTO, Ingredient ingredient, Recipe recipe) {
+        RecipeIngredient recipeIngredient = new RecipeIngredient();
+        recipeIngredient.setName(ingredient.getName());
+        recipeIngredient.setUnit(recipeIngredientDTO.getUnit());
+        recipeIngredient.setQuantity(recipeIngredientDTO.getQuantity());
+        recipeIngredient.setOrderIndex(recipeIngredientDTO.getOrderIndex());
+        recipeIngredient.setIngredient(ingredient);
+
+        // Set RecipeIngredient:Recipe relationship
+        recipeIngredient.setRecipe(recipe);
+        return recipeIngredient;
+    }
+
+
+    // If exists, return existing ingredient name, else create ingredient and return name of new ingredient
+    private String findOrCreateIngredientByName(RecipeIngredientDTO recipeIngredientDTO) {
+        Optional<String> existingIngredientName = ingredientRepository.findDistinctNameIgnoreCase(recipeIngredientDTO.getName().trim());
+        if (existingIngredientName.isPresent()) {
+            return existingIngredientName.get();
+        } else {
+            // Create the ingredient with name normalized to lowercase
+            Ingredient newIngredient = new Ingredient();
+            newIngredient.setName(recipeIngredientDTO.getName().toLowerCase());
+            newIngredient.setDefaultUnit(recipeIngredientDTO.getUnit());
+            Ingredient savedIngredient = ingredientRepository.save(newIngredient);
+            return savedIngredient.getName();
+        }
     }
 
     @Transactional
@@ -96,35 +113,40 @@ public class RecipeServiceImpl implements RecipeService {
 
         // Get recipe from repository
         Recipe existingRecipe = recipeRepository.findById(id)
-                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found with id: " + id));
+                .orElseThrow(() -> new RecipeNotFoundException("Recipe with id " + id + " not found"));
 
         // Update fields in existingRecipe if present in updateDTO
         updateDTO.getName().ifPresent(existingRecipe::setName);
         updateDTO.getDescription().ifPresent(existingRecipe::setDescription);
         updateDTO.getRecipeUrl().ifPresent(existingRecipe::setRecipeUrl);
-        updateDTO.getIngredients().ifPresent(ingredientUpdates ->
-                updateIngredients(existingRecipe, ingredientUpdates));
+        updateDTO.getRecipeIngredients().ifPresent(recipeIngredientUpdates ->
+                updateRecipeIngredients(existingRecipe, recipeIngredientUpdates));
 
         // Save updated recipe
         Recipe savedRecipe = recipeRepository.save(existingRecipe);
         return recipeMapper.toRecipeDTO(savedRecipe);
     }
 
-    private void updateIngredients(Recipe recipe, List<IngredientUpdateDTO> ingredientUpdates) {
-        recipe.getIngredients().clear();
+    private void updateRecipeIngredients(Recipe recipe, List<RecipeIngredientUpdateDTO> recipeIngredientUpdates) {
+        recipe.getRecipeIngredients().clear();
 
-        for (IngredientUpdateDTO updateDTO : ingredientUpdates) {
-            Ingredient ingredient = new Ingredient();
+        for (RecipeIngredientUpdateDTO updateDTO : recipeIngredientUpdates) {
+            RecipeIngredient recipeIngredient = new RecipeIngredient();
 
-            updateDTO.getId().ifPresent(ingredient::setId);
-            updateDTO.getName().ifPresent(ingredient::setName);
-            updateDTO.getQuantity().ifPresent(ingredient::setQuantity);
-            updateDTO.getUnit().ifPresent(ingredient::setUnit);
-            updateDTO.getOrderIndex().ifPresent(ingredient::setOrderIndex);
+            updateDTO.getId().ifPresent(recipeIngredient::setId);
+            updateDTO.getName().ifPresent(recipeIngredient::setName);
+            updateDTO.getQuantity().ifPresent(recipeIngredient::setQuantity);
+            updateDTO.getUnit().ifPresent(recipeIngredient::setUnit);
+            updateDTO.getOrderIndex().ifPresent(recipeIngredient::setOrderIndex);
 
             // Set the recipe relationship
-            ingredient.setRecipe(recipe);
-            recipe.getIngredients().add(ingredient);
+            recipeIngredient.setRecipe(recipe);
+            recipe.getRecipeIngredients().add(recipeIngredient);
         }
+    }
+
+    @Override
+    public void deleteAllRecipes() {
+        recipeRepository.deleteAll();
     }
 }

@@ -7,9 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class IngredientDTO {
+public class RecipeIngredientDTO {
     private Long id;
     private String name;
-    private String defaultUnit;
+    private Integer quantity;
+    private String unit;
+    private Integer orderIndex;
 }
 

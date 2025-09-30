@@ -41,5 +41,5 @@ public class Recipe {
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("orderIndex ASC")
-    private List<Ingredient> ingredients;
+    private List<RecipeIngredient> recipeIngredients;
 }
