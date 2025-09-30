@@ -16,6 +16,7 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
     Optional<String> findDistinctNameIgnoreCase(@Param("name") String name);
 
     Optional<Ingredient> findByNameIgnoreCase(String name);
+
 }
 
 

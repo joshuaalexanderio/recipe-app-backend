@@ -1,7 +1,22 @@
 # Recipe App Backend API
 
-A Spring Boot REST API for managing recipes with ingredients. Supports creating recipes, managing users, and future
-integration with Todoist for shopping lists.
+A Spring Boot REST API for managing recipes and ingredients, providing the backend for the [Recipe App Frontend](https://github.com/stopthink/recipe-app-frontend).
+
+## Features
+
+- 📝 Create and manage recipes with ingredients
+- 🔗 Auto-import recipes from URLs
+- 👤 User authentication and management
+- ⭐ Favorite recipes
+- 📦 RESTful API with comprehensive documentation
+- 🛒 Todoist integration for one-click shopping lists *(coming soon)*
+
+## Tech Stack
+
+- Java 17+ / Spring Boot
+- PostgreSQL (via Docker)
+- Spring Data JPA
+- Docker Compose for easy setup
 
 ## Prerequisites
 
@@ -77,6 +92,9 @@ http://localhost:8080/api
 
 - `GET /ingredients` - List all ingredients
 - `GET /ingredients/{id}` - Get ingredient by ID
+- `POST /ingredients` - Create ingredient
+- `PUT /ingredients/{id}` - Update ingredient
+- `DELETE /ingredients` - Delete ingredient
 
 ### Users
 
@@ -103,7 +121,7 @@ curl -X POST http://localhost:8080/api/recipes \
     "ingredients": [
       {"name": "pasta", "quantity": "1", "unit": "lb", "orderIndex": 1},
       {"name": "marinara sauce", "quantity": "2", "unit": "cups", "orderIndex": 2},
-      {"name": "parmesan cheese", "quantity": "1/2", "unit": "cup", "orderIndex": 3}
+      {"name": "parmesan cheese", "quantity": "1/2", "unit": "cup", "orderIndex": 3},
     ]
   }'
 ```
@@ -125,7 +143,16 @@ curl -X PUT http://localhost:8080/api/recipes/1 \
   -u user:password \
   -d '{
     "name": "New Recipe Name",
-    "description": "Updated description"
+    "description": "Updated description",
+    "favorite": true
+  }'
+
+# Mark recipe as favorite
+curl -X PUT http://localhost:8080/api/recipes/1 \
+  -H "Content-Type: application/json" \
+  -u user:password \
+  -d '{
+    "favorite": true
   }'
 
 # Replace entire ingredients list
@@ -139,6 +166,29 @@ curl -X PUT http://localhost:8080/api/recipes/1 \
     ]
   }'
 ```
+### Create an ingredient
+
+```bash
+curl -X POST http://localhost:8080/api/ingredients \
+  -H "Content-Type: application/json" \
+  -u user:password \
+  -d '{
+    "name": "olive oil",
+    "quantity": "1",
+    "defaultUnit": "tbsp"
+  }'
+```
+### Update an ingredient
+```bash
+curl -X PUT http://localhost:8080/api/ingredients/9 \
+    -H "Content-Type: application/json" \
+    -u user:password \
+    -d '{
+    "name": "extra virgin olive oil",
+    "quantity": "3",
+    }'
+```
+    
 
 ## Update Notes
 

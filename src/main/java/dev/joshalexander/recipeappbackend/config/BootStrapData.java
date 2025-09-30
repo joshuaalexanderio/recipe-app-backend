@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-@Profile({"dev", "test"}) // Add this annotation
+@Profile({"dev", "test"})
 public class BootStrapData implements CommandLineRunner {
     @Autowired
     UserRepository userRepository;

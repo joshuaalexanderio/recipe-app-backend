@@ -15,11 +15,16 @@ public class IngredientUpdateDTO {
 
     private Optional<String> defaultUnit = Optional.empty();
 
+
     public void setId(Long id) {
         this.id = id != null ? Optional.of(id) : Optional.empty();
     }
 
     public void setName(String name) {
         this.name = name != null ? Optional.of(name) : Optional.empty();
+    }
+
+    public void setDefaultUnit(String defaultUnit) {
+        this.defaultUnit = defaultUnit != null ? Optional.of(defaultUnit) : Optional.empty();
     }
 }
