@@ -42,10 +42,15 @@ public class IngredientController {
             return ResponseEntity.ok(ingredient);
         }
 
+    @ PostMapping
+    public ResponseEntity<IngredientDTO> createIngredient(@RequestBody IngredientDTO ingredientData) {
+        IngredientDTO createdIngredient = ingredientService.createIngredient(ingredientData);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdIngredient);
 
     @DeleteMapping("/{ingredientId}")
     public ResponseEntity<IngredientDTO> deleteIngredient(@PathVariable Long ingredientId) {
         Optional<IngredientDTO> ingredient = ingredientService.deleteIngredient(ingredientId);
         return ingredient.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+
     }
 }

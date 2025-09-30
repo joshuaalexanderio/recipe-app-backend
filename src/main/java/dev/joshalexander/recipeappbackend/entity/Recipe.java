@@ -40,6 +40,6 @@ public class Recipe {
     private User user;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OrderBy("name ASC")
-    private List<Ingredient> ingredients;
+    @OrderBy("orderIndex ASC")
+    private List<RecipeIngredient> recipeIngredients;
 }

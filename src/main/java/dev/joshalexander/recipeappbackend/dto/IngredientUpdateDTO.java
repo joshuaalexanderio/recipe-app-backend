@@ -10,10 +10,11 @@ import java.util.Optional;
 public class IngredientUpdateDTO {
 
     private Optional<Long> id = Optional.empty();
+
     private Optional<String> name = Optional.empty();
-    private Optional<String> quantity = Optional.empty();
+
     private Optional<String> defaultUnit = Optional.empty();
-    private Optional<Integer> orderIndex = Optional.empty();
+
 
     public void setId(Long id) {
         this.id = id != null ? Optional.of(id) : Optional.empty();

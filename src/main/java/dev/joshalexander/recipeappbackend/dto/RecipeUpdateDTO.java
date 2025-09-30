@@ -19,7 +19,7 @@ public class RecipeUpdateDTO {
 
     private Optional<String> recipeUrl = Optional.empty();
 
-    private Optional<List<IngredientUpdateDTO>> ingredients = Optional.empty();
+    private Optional<List<RecipeIngredientUpdateDTO>> recipeIngredients = Optional.empty();
 
     private Optional<Boolean> favorite = Optional.empty();
 
@@ -37,8 +37,8 @@ public class RecipeUpdateDTO {
         this.recipeUrl = recipeUrl != null ? Optional.of(recipeUrl) : Optional.empty();
     }
 
-    public void setIngredients(List<IngredientUpdateDTO> ingredients) {
-        this.ingredients = ingredients != null ? Optional.of(ingredients) : Optional.empty();
+    public void setRecipeIngredients(List<RecipeIngredientUpdateDTO> recipeIngredients) {
+        this.recipeIngredients = recipeIngredients != null ? Optional.of(recipeIngredients) : Optional.empty();
     }
 
     public void setFavorite(Boolean favorite) {

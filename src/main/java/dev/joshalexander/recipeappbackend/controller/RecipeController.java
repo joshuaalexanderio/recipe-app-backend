@@ -48,4 +48,10 @@ public class RecipeController {
         return ResponseEntity.ok(updatedRecipe);
     }
 
+    @DeleteMapping
+    public ResponseEntity<Void> deleteAllRecipes() {
+        recipeService.deleteAllRecipes();
+        return ResponseEntity.noContent().build();
+    }
+
 }

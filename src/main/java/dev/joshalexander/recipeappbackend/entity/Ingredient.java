@@ -3,6 +3,8 @@ package dev.joshalexander.recipeappbackend.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "ingredients")
 @Data
@@ -19,7 +21,6 @@ public class Ingredient {
 
     private String defaultUnit;
 
-    @ManyToOne
-    @JoinColumn(name = "recipe_id")
-    private Recipe recipe;
+    @OneToMany(mappedBy = "ingredient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RecipeIngredient> recipeIngredients;
 }
