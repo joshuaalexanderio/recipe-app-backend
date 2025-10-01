@@ -16,10 +16,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    @Value("${SECURITY_USERNAME}")
+    @Value("${SECURITY_USERNAME:admin}")
     private String username;
 
-    @Value("${SECURITY_PASSWORD}")
+    @Value("${SECURITY_PASSWORD:password}")
     private String password;
 
 
@@ -28,6 +28,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/docs/**", "/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/v3/api-docs").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
