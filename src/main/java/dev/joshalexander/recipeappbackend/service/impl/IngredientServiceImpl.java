@@ -52,7 +52,6 @@ public class IngredientServiceImpl implements IngredientService {
 
         // Update fields in existingIngredient if present in updateDTO
         updateDTO.getName().ifPresent(existingIngredient::setName);
-        updateDTO.getQuantity().ifPresent(existingIngredient::setQuantity);
         updateDTO.getDefaultUnit().ifPresent(existingIngredient::setDefaultUnit);
 
         // Save updated ingredient

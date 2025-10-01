@@ -31,22 +31,18 @@ public class IngredientController {
 
         return ingredient.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
-    @PostMapping
-    public ResponseEntity<IngredientDTO> createIngredient(@RequestBody IngredientDTO ingredientDTO) {
-        IngredientDTO ingredient = ingredientService.createIngredient(ingredientDTO);
-        return ResponseEntity.ok(ingredient);
-    }
+
     @PutMapping("/{ingredientId}")
     public ResponseEntity<IngredientDTO> updateIngredient(@PathVariable Long ingredientId, @RequestBody IngredientUpdateDTO updateDTO) {
             IngredientDTO ingredient = ingredientService.updateIngredient(ingredientId, updateDTO);
             return ResponseEntity.ok(ingredient);
         }
 
-    @ PostMapping
+    @PostMapping
     public ResponseEntity<IngredientDTO> createIngredient(@RequestBody IngredientDTO ingredientData) {
         IngredientDTO createdIngredient = ingredientService.createIngredient(ingredientData);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdIngredient);
-
+    }
     @DeleteMapping("/{ingredientId}")
     public ResponseEntity<IngredientDTO> deleteIngredient(@PathVariable Long ingredientId) {
         Optional<IngredientDTO> ingredient = ingredientService.deleteIngredient(ingredientId);
