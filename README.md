@@ -16,7 +16,7 @@ A Spring Boot REST API for managing recipes and ingredients, providing the backe
 - Java 17+ / Spring Boot
 - PostgreSQL (via Docker)
 - Spring Data JPA
-- Docker Compose for easy setup
+- Docker 
 
 ## Prerequisites
 
@@ -75,120 +75,24 @@ docker compose down && docker compose up --build
 docker compose down -v && docker compose up --build
 ```
 
-## API Endpoints
+## API Documentation
+
+### Interactive Documentation
+Full API documentation with interactive testing is available via SwaggerUI:
+
+http://localhost:8080/docs
+
+### Quick Overview
+The API provides the following resources:
+- **Recipes** (`/api/recipes`) - Create, read, update, and delete recipes with ingredients
+- **Ingredients** (`/api/ingredients`) - Manage individual ingredients
+- **Users** (`/api/users`) - User management
+- **Recipe Ingredients** (`/api/recipeIngredients`) - Query ingredients for specific recipes
 
 ### Base URL
-
 http://localhost:8080/api
 
-### Recipes
-
-- `GET /recipes` - List all recipes
-- `GET /recipes/{id}` - Get recipe by ID
-- `POST /recipes` - Create new recipe
-- `PUT /recipes/{id}` - Update recipe (partial updates supported)
-
-### Ingredients
-
-- `GET /ingredients` - List all ingredients
-- `GET /ingredients/{id}` - Get ingredient by ID
-- `POST /ingredients` - Create ingredient
-- `PUT /ingredients/{id}` - Update ingredient
-- `DELETE /ingredients` - Delete ingredient
-
-### Users
-
-- `GET /users` - List all users
-- `GET /users/{id}` - Get user by ID
-
-### Documentation
-
-- `GET /` - API root with navigation links
-- `GET /docs` - API documentation with examples
-
-## Example Usage
-
-### Create a Recipe
-
-```bash
-curl -X POST http://localhost:8080/api/recipes \
-  -H "Content-Type: application/json" \
-  -u user:password \
-  -d '{
-    "name": "Simple Pasta",
-    "description": "Basic pasta with marinara sauce",
-    "user": {"id": 1},
-    "ingredients": [
-      {"name": "pasta", "quantity": "1", "unit": "lb", "orderIndex": 1},
-      {"name": "marinara sauce", "quantity": "2", "unit": "cups", "orderIndex": 2},
-      {"name": "parmesan cheese", "quantity": "1/2", "unit": "cup", "orderIndex": 3},
-    ]
-  }'
-```
-
-### Update a Recipe
-
-```bash
-# Update only the recipe name (ingredients preserved)
-curl -X PUT http://localhost:8080/api/recipes/1 \
-  -H "Content-Type: application/json" \
-  -u user:password \
-  -d '{
-    "name": "Updated Recipe Name"
-  }'
-
-# Update name and description
-curl -X PUT http://localhost:8080/api/recipes/1 \
-  -H "Content-Type: application/json" \
-  -u user:password \
-  -d '{
-    "name": "New Recipe Name",
-    "description": "Updated description",
-    "favorite": true
-  }'
-
-# Mark recipe as favorite
-curl -X PUT http://localhost:8080/api/recipes/1 \
-  -H "Content-Type: application/json" \
-  -u user:password \
-  -d '{
-    "favorite": true
-  }'
-
-# Replace entire ingredients list
-curl -X PUT http://localhost:8080/api/recipes/1 \
-  -H "Content-Type: application/json" \
-  -u user:password \
-  -d '{
-    "ingredients": [
-      {"id": 1, "name": "large egg", "quantity": "5", "unit": null, "orderIndex": 1},
-      {"name": "cheese", "quantity": "2", "unit": "slices", "orderIndex": 2}
-    ]
-  }'
-```
-### Create an ingredient
-
-```bash
-curl -X POST http://localhost:8080/api/ingredients \
-  -H "Content-Type: application/json" \
-  -u user:password \
-  -d '{
-    "name": "olive oil",
-    "quantity": "1",
-    "defaultUnit": "tbsp"
-  }'
-```
-### Update an ingredient
-```bash
-curl -X PUT http://localhost:8080/api/ingredients/9 \
-    -H "Content-Type: application/json" \
-    -u user:password \
-    -d '{
-    "name": "extra virgin olive oil",
-    "quantity": "3",
-    }'
-```
-    
+Run the application and visit `/docs` for complete endpoint details, request/response schemas, and the ability to test all endpoints directly from your browser.
 
 ## Update Notes
 
