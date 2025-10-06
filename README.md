@@ -13,7 +13,7 @@ A Spring Boot REST API for managing recipes and ingredients, providing the backe
 
 ## Tech Stack
 
-- Java 17+ / Spring Boot
+- Java 21 / Spring Boot
 - PostgreSQL (via Docker)
 - Spring Data JPA
 - Docker 
