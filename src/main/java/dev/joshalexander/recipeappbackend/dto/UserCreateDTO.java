@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserCreateDTO {
+    private String todoistAccessToken;
+    private String todoistUserId;
     private String name;
     private String email;
 }

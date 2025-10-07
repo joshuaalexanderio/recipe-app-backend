@@ -1,12 +1,10 @@
 package dev.joshalexander.recipeappbackend.controller;
 
+import dev.joshalexander.recipeappbackend.dto.UserCreateDTO;
 import dev.joshalexander.recipeappbackend.dto.UserDTO;
 import dev.joshalexander.recipeappbackend.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +13,7 @@ import java.util.Optional;
 @RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
+
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -30,5 +29,12 @@ public class UserController {
         Optional<UserDTO> user = userService.getUserById(userId);
 
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserCreateDTO userCreateDTO) {
+        UserDTO user = userService.createUser(userCreateDTO);
+
+        return ResponseEntity.ok(user);
     }
 }

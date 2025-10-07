@@ -18,6 +18,8 @@ public interface EntityMapper {
 
     UserDTO toUserDTO(User user);
 
+    User toUser(UserCreateDTO userCreateDTO);
+
     RecipeDTO toRecipeDTO(Recipe recipe);
 
     Recipe toRecipe(RecipeDTO recipeDTO);
