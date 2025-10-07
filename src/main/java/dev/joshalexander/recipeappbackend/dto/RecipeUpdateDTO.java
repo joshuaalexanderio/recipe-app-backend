@@ -14,7 +14,7 @@ public class RecipeUpdateDTO {
 
     private Optional<String> name = Optional.empty();
 
-    @Size(max = 2000, message = "Description cannot exceed 2000 characters")
+    @Size(max = 500, message = "Description cannot exceed 500 characters")
     private Optional<String> description = Optional.empty();
 
     @Pattern(regexp = "^https?://[^\\s]+$", message = "Recipe URL must be a valid HTTP/HTTPS URL")
