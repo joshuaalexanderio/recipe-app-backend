@@ -3,12 +3,10 @@ package dev.joshalexander.recipeappbackend.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.genai.Client;
 import com.google.genai.types.*;
-import dev.joshalexander.recipeappbackend.dto.RecipeImportResponseDTO;
+import dev.joshalexander.recipeappbackend.dto.RecipeImportDTO;
 import dev.joshalexander.recipeappbackend.service.RecipeImportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableList;
 import com.google.genai.types.Schema;
 import org.springframework.stereotype.Service;
 
@@ -24,48 +22,48 @@ public class RecipeImportServiceImpl implements RecipeImportService {
         this.objectMapper = objectMapper;
     }
 
-    public RecipeImportResponseDTO getAIResponse(String recipeURL) {
+    public RecipeImportDTO getAIResponse(String recipeURL) {
         log.info("Importing recipe from URL: {}", recipeURL);
 
         // Json schema for response
         String schemaJson = """
-        {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string"
-            },
-            "description": {
-              "type": "string"
-            },
-            "recipeUrl": {
-              "type": "string"
-            },
-            "recipeIngredients": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
+                {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "recipeUrl": {
+                      "type": "string"
+                    },
+                    "recipeIngredients": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "quantity": {
+                            "type": "string"
+                          },
+                          "unit": {
+                            "type": "string"
+                          },
+                          "orderIndex": {
+                            "type": "integer"
+                          }
+                        },
+                        "required": ["name", "quantity", "unit", "orderIndex"]
+                      }
+                    }
                   },
-                  "quantity": {
-                    "type": "string"
-                  },
-                  "unit": {
-                    "type": "string"
-                  },
-                  "orderIndex": {
-                    "type": "integer"
-                  }
-                },
-                "required": ["name", "quantity", "unit", "orderIndex"]
-              }
-            }
-          },
-          "required": ["name", "description", "recipeUrl", "recipeIngredients"]
-        }
-        """;
+                  "required": ["name", "description", "recipeUrl", "recipeIngredients"]
+                }
+                """;
 
         // Build response schema from json
         Schema schema = Schema.fromJson(schemaJson);
@@ -78,12 +76,12 @@ public class RecipeImportServiceImpl implements RecipeImportService {
                 .build();
 
         String prompt = """
-                Extract recipe from %s for shopping list import.
-                - Description max 500 chars
-                - Separate ingredient names from quantities (e.g., "flour" not "2 cups flour")
-                - Abbreviate long units (tbsp, tsp, oz, etc)
-                - Use URL: %s
-        """.formatted(recipeURL, recipeURL);
+                        Extract recipe from %s for shopping list import.
+                        - Description max 500 chars
+                        - Separate ingredient names from quantities (e.g., "flour" not "2 cups flour")
+                        - Abbreviate long units (tbsp, tsp, oz, etc)
+                        - Use URL: %s
+                """.formatted(recipeURL, recipeURL);
 
         Client client = new Client();
         GenerateContentResponse response;
@@ -123,7 +121,7 @@ public class RecipeImportServiceImpl implements RecipeImportService {
         log.info("AI  {}", jsonResponse);
 
         try {
-            RecipeImportResponseDTO recipe = objectMapper.readValue(jsonResponse, RecipeImportResponseDTO.class);
+            RecipeImportDTO recipe = objectMapper.readValue(jsonResponse, RecipeImportDTO.class);
             log.info("Successfully parsed recipe: {}", recipe.getName());
             return recipe;
         } catch (Exception e) {

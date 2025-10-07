@@ -1,7 +1,7 @@
 package dev.joshalexander.recipeappbackend.service;
-import dev.joshalexander.recipeappbackend.dto.RecipeDTO;
-import dev.joshalexander.recipeappbackend.dto.RecipeImportResponseDTO;
+
+import dev.joshalexander.recipeappbackend.dto.RecipeImportDTO;
 
 public interface RecipeImportService {
-    RecipeImportResponseDTO getAIResponse(String recipeURL);
+    RecipeImportDTO getAIResponse(String recipeURL);
 }

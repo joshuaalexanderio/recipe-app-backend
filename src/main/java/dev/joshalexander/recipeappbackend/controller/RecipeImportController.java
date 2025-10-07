@@ -1,11 +1,13 @@
 package dev.joshalexander.recipeappbackend.controller;
 
-import dev.joshalexander.recipeappbackend.dto.RecipeImportResponseDTO;
+import dev.joshalexander.recipeappbackend.dto.RecipeImportDTO;
 import dev.joshalexander.recipeappbackend.service.RecipeImportService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +24,7 @@ public class RecipeImportController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> importRecipe(@RequestParam String recipeURL) {
         try {
-            RecipeImportResponseDTO recipe = recipeImportService.getAIResponse(recipeURL);
+            RecipeImportDTO recipe = recipeImportService.getAIResponse(recipeURL);
             return ResponseEntity.ok(recipe);
         } catch (Exception e) {
             log.error("Error importing recipe", e);

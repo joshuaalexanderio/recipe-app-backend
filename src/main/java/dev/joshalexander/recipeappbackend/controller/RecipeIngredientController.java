@@ -1,8 +1,6 @@
 package dev.joshalexander.recipeappbackend.controller;
 
-import dev.joshalexander.recipeappbackend.dto.IngredientDTO;
 import dev.joshalexander.recipeappbackend.dto.RecipeIngredientDTO;
-import dev.joshalexander.recipeappbackend.entity.RecipeIngredient;
 import dev.joshalexander.recipeappbackend.service.RecipeIngredientService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

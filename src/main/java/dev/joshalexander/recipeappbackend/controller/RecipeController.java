@@ -1,5 +1,6 @@
 package dev.joshalexander.recipeappbackend.controller;
 
+import dev.joshalexander.recipeappbackend.dto.RecipeCreateDTO;
 import dev.joshalexander.recipeappbackend.dto.RecipeDTO;
 import dev.joshalexander.recipeappbackend.dto.RecipeUpdateDTO;
 import dev.joshalexander.recipeappbackend.service.RecipeService;
@@ -34,8 +35,8 @@ public class RecipeController {
     }
 
     @PostMapping
-    public ResponseEntity<RecipeDTO> createRecipe(@Valid @RequestBody RecipeDTO recipeDTO) {
-        RecipeDTO createdRecipe = recipeService.createRecipe(recipeDTO);
+    public ResponseEntity<RecipeDTO> createRecipe(@Valid @RequestBody RecipeCreateDTO recipeCreateDTO) {
+        RecipeDTO createdRecipe = recipeService.createRecipe(recipeCreateDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdRecipe);
     }
 

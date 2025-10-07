@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-// For Read/Response
-public class IngredientDTO {
-    private Long id;
+public class IngredientCreateDTO {
+
     private String name;
     private String defaultUnit;
 }

@@ -1,5 +1,6 @@
 package dev.joshalexander.recipeappbackend.service;
 
+import dev.joshalexander.recipeappbackend.dto.RecipeCreateDTO;
 import dev.joshalexander.recipeappbackend.dto.RecipeDTO;
 import dev.joshalexander.recipeappbackend.dto.RecipeUpdateDTO;
 
@@ -11,7 +12,7 @@ public interface RecipeService {
 
     Optional<RecipeDTO> getRecipeById(Long id);
 
-    RecipeDTO createRecipe(RecipeDTO recipeDTO);
+    RecipeDTO createRecipe(RecipeCreateDTO recipeCreateDTO);
 
     RecipeDTO updateRecipe(Long id, RecipeUpdateDTO updateDTO);
 

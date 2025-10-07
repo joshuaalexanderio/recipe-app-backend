@@ -1,5 +1,6 @@
 package dev.joshalexander.recipeappbackend.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,10 +11,14 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipeImportResponseDTO {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class RecipeCreateDTO {
     private String name;
     private String description;
     @Pattern(regexp = "^https?://[^\\s]+$", message = "Recipe URL must be a valid HTTP/HTTPS URL")
     private String recipeUrl;
-    private List<RecipeIngredientImportDTO> recipeIngredients;
+    private UserDTO user;
+    private boolean favorite;
+    private List<RecipeIngredientCreateDTO> recipeIngredients;
 }
+

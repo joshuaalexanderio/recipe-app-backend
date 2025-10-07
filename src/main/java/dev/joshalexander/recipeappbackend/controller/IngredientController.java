@@ -1,5 +1,6 @@
 package dev.joshalexander.recipeappbackend.controller;
 
+import dev.joshalexander.recipeappbackend.dto.IngredientCreateDTO;
 import dev.joshalexander.recipeappbackend.dto.IngredientDTO;
 import dev.joshalexander.recipeappbackend.dto.IngredientUpdateDTO;
 import dev.joshalexander.recipeappbackend.service.IngredientService;
@@ -34,15 +35,16 @@ public class IngredientController {
 
     @PutMapping("/{ingredientId}")
     public ResponseEntity<IngredientDTO> updateIngredient(@PathVariable Long ingredientId, @RequestBody IngredientUpdateDTO updateDTO) {
-            IngredientDTO ingredient = ingredientService.updateIngredient(ingredientId, updateDTO);
-            return ResponseEntity.ok(ingredient);
-        }
+        IngredientDTO ingredient = ingredientService.updateIngredient(ingredientId, updateDTO);
+        return ResponseEntity.ok(ingredient);
+    }
 
     @PostMapping
-    public ResponseEntity<IngredientDTO> createIngredient(@RequestBody IngredientDTO ingredientData) {
+    public ResponseEntity<IngredientDTO> createIngredient(@RequestBody IngredientCreateDTO ingredientData) {
         IngredientDTO createdIngredient = ingredientService.createIngredient(ingredientData);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdIngredient);
     }
+
     @DeleteMapping("/{ingredientId}")
     public ResponseEntity<IngredientDTO> deleteIngredient(@PathVariable Long ingredientId) {
         Optional<IngredientDTO> ingredient = ingredientService.deleteIngredient(ingredientId);

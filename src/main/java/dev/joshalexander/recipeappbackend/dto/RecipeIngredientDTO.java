@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+// For Read/Response
 public class RecipeIngredientDTO {
     private Long id;
     private String name;

@@ -10,9 +10,11 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface EntityMapper {
 
-    IngredientDTO toIngredientDTO(Ingredient ingredient);
+    IngredientCreateDTO toIngredientCreateDTO(Ingredient ingredient);
 
-    Ingredient toIngredient(IngredientDTO ingredientDTO);
+    Ingredient toIngredient(IngredientCreateDTO ingredientCreateDTO);
+
+    IngredientDTO toIngredientDTO(Ingredient ingredient);
 
     UserDTO toUserDTO(User user);
 
@@ -23,5 +25,7 @@ public interface EntityMapper {
     RecipeIngredientDTO toRecipeIngredientDTO(RecipeIngredient recipeIngredient);
 
     RecipeIngredient toRecipeIngredient(RecipeIngredientDTO recipeIngredientDTO);
+
+    RecipeIngredient toRecipeIngredient(RecipeIngredientCreateDTO recipeIngredientCreateDTO);
 
 }

@@ -1,4 +1,6 @@
 package dev.joshalexander.recipeappbackend.service.impl;
+
+import dev.joshalexander.recipeappbackend.dto.IngredientCreateDTO;
 import dev.joshalexander.recipeappbackend.dto.IngredientDTO;
 import dev.joshalexander.recipeappbackend.dto.IngredientUpdateDTO;
 import dev.joshalexander.recipeappbackend.entity.Ingredient;
@@ -36,13 +38,13 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public IngredientDTO createIngredient(IngredientDTO ingredientDTO) {
-        ingredientDTO.setName(ingredientDTO.getName().toLowerCase());
-        Ingredient ingredient = ingredientMapper.toIngredient(ingredientDTO);
+    public IngredientDTO createIngredient(IngredientCreateDTO ingredientCreateDTO) {
+        ingredientCreateDTO.setName(ingredientCreateDTO.getName().toLowerCase());
+        Ingredient ingredient = ingredientMapper.toIngredient(ingredientCreateDTO);
         Ingredient savedIngredient = ingredientRepository.save(ingredient);
         return ingredientMapper.toIngredientDTO(savedIngredient);
     }
-    
+
     @Transactional
     public IngredientDTO updateIngredient(Long id, IngredientUpdateDTO updateDTO) {
 
@@ -58,7 +60,7 @@ public class IngredientServiceImpl implements IngredientService {
         Ingredient savedIngredient = ingredientRepository.save(existingIngredient);
         return ingredientMapper.toIngredientDTO(savedIngredient);
     }
-    
+
     @Transactional
     public Optional<IngredientDTO> deleteIngredient(Long id) {
         Optional<Ingredient> optionalIngredient = ingredientRepository.findById(id);
@@ -70,6 +72,6 @@ public class IngredientServiceImpl implements IngredientService {
             return Optional.of(deletedIngredient);
         }
         return Optional.empty();
-        
+
     }
 }

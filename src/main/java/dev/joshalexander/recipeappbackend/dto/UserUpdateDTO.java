@@ -7,10 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-// For Read/Response
-public class IngredientDTO {
-    private Long id;
+// Id passed through path
+public class UserUpdateDTO {
     private String name;
-    private String defaultUnit;
+    private String email;
 }
-

@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-// For Read/Response
-public class IngredientDTO {
-    private Long id;
+public class RecipeIngredientCreateDTO {
     private String name;
-    private String defaultUnit;
+    private String quantity;
+    private String unit;
+    private Integer orderIndex;
 }
 
