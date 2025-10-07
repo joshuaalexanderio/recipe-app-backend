@@ -3,11 +3,10 @@ package dev.joshalexander.recipeappbackend.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
-public class ApiRootController {
+public class RootController {
 
     @GetMapping("/")
     public Map<String, Object> getApiRoot() {
@@ -19,7 +18,9 @@ public class ApiRootController {
                         "docs", Map.of("href", "/docs"),
                         "recipes", Map.of("href", "/api/recipes"),
                         "users", Map.of("href", "/api/users"),
-                        "ingredients", Map.of("href", "/api/ingredients")
+                        "ingredients", Map.of("href", "/api/ingredients"),
+                        "recipeIngredients", Map.of("href", "/api/recipeIngredients"),
+                        "recipeImport", Map.of("href", "/api/recipeImport")
                 )
         );
     }
