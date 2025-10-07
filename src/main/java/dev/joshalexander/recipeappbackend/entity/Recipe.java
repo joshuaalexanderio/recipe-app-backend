@@ -23,8 +23,8 @@ public class Recipe {
     @Column(nullable = false)
     private String name;
 
-    @Column(length = 2000)
-    @Size(max = 2000, message = "Description cannot exceed 2000 characters")
+    @Column(length = 500)
+    @Size(max = 500, message = "Description cannot exceed 500 characters")
     private String description;
 
     @Pattern(regexp = "^https?://[^\\s]+$", message = "Recipe URL must be a valid HTTP/HTTPS URL")
