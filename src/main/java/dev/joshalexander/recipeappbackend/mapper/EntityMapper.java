@@ -1,9 +1,6 @@
 package dev.joshalexander.recipeappbackend.mapper;
 
-import dev.joshalexander.recipeappbackend.dto.IngredientDTO;
-import dev.joshalexander.recipeappbackend.dto.RecipeDTO;
-import dev.joshalexander.recipeappbackend.dto.RecipeIngredientDTO;
-import dev.joshalexander.recipeappbackend.dto.UserDTO;
+import dev.joshalexander.recipeappbackend.dto.*;
 import dev.joshalexander.recipeappbackend.entity.Ingredient;
 import dev.joshalexander.recipeappbackend.entity.Recipe;
 import dev.joshalexander.recipeappbackend.entity.RecipeIngredient;
