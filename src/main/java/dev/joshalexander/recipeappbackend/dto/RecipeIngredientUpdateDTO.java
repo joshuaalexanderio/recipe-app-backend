@@ -13,7 +13,7 @@ public class RecipeIngredientUpdateDTO {
 
     private Optional<String> name = Optional.empty();
 
-    private Optional<Integer> quantity = Optional.empty();
+    private Optional<String> quantity = Optional.empty();
 
     private Optional<Integer> orderIndex = Optional.empty();
 
@@ -27,7 +27,7 @@ public class RecipeIngredientUpdateDTO {
         this.name = name != null ? Optional.of(name) : Optional.empty();
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(String quantity) {
         this.quantity = quantity != null ? Optional.of(quantity) : Optional.empty();
     }
 

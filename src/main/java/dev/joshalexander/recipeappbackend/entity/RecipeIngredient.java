@@ -20,7 +20,7 @@ public class RecipeIngredient {
     @Column(nullable = false)
     private String name;
 
-    private Integer quantity;
+    private String quantity;
 
     private String unit;
 

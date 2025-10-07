@@ -179,7 +179,7 @@ public class BootStrapData implements CommandLineRunner {
         // Create RecipeIngredients
         RecipeIngredient ri1 = new RecipeIngredient();
         ri1.setName("egg");
-        ri1.setQuantity(2);
+        ri1.setQuantity("2");
         ri1.setUnit("large");
         ri1.setOrderIndex(1);
         ri1.setIngredient(egg);
@@ -187,7 +187,7 @@ public class BootStrapData implements CommandLineRunner {
 
         RecipeIngredient ri2 = new RecipeIngredient();
         ri2.setName("canadian bacon");
-        ri2.setQuantity(2);
+        ri2.setQuantity("2");
         ri2.setUnit("slices");
         ri2.setOrderIndex(2);
         ri2.setIngredient(canadianBacon);
@@ -195,7 +195,7 @@ public class BootStrapData implements CommandLineRunner {
 
         RecipeIngredient ri3 = new RecipeIngredient();
         ri3.setName("green onion");
-        ri3.setQuantity(1 / 2);
+        ri3.setQuantity("1/2");
         ri3.setUnit("stalk");
         ri3.setOrderIndex(3);
         ri3.setIngredient(greenOnion);
@@ -203,7 +203,7 @@ public class BootStrapData implements CommandLineRunner {
 
         RecipeIngredient ri4 = new RecipeIngredient();
         ri4.setName("butter");
-        ri4.setQuantity(1);
+        ri4.setQuantity("1");
         ri4.setUnit("tbsp");
         ri4.setOrderIndex(4);
         ri4.setIngredient(butter);
@@ -211,7 +211,7 @@ public class BootStrapData implements CommandLineRunner {
 
         RecipeIngredient ri5 = new RecipeIngredient();
         ri5.setName("english muffin");
-        ri5.setQuantity(1);
+        ri5.setQuantity("1");
         ri5.setUnit("whole");
         ri5.setOrderIndex(5);
         ri5.setIngredient(englishMuffin);
@@ -219,7 +219,7 @@ public class BootStrapData implements CommandLineRunner {
 
         RecipeIngredient ri6 = new RecipeIngredient();
         ri6.setName("cheddar cheese");
-        ri6.setQuantity(1);
+        ri6.setQuantity("1");
         ri6.setUnit("oz");
         ri6.setOrderIndex(6);
         ri6.setIngredient(cheddarCheese);
@@ -227,7 +227,7 @@ public class BootStrapData implements CommandLineRunner {
 
         RecipeIngredient ri7 = new RecipeIngredient();
         ri7.setName("jalapeno");
-        ri7.setQuantity(1);
+        ri7.setQuantity("1");
         ri7.setUnit("whole");
         ri7.setOrderIndex(7);
         ri7.setIngredient(jalapeno);
