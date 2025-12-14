@@ -95,20 +95,6 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeIngredient;
     }
 
-    private static @NotNull RecipeIngredient getRecipeIngredient(RecipeIngredientDTO recipeIngredientDTO, Ingredient ingredient, Recipe recipe) {
-        RecipeIngredient recipeIngredient = new RecipeIngredient();
-        recipeIngredient.setName(ingredient.getName());
-        recipeIngredient.setUnit(recipeIngredientDTO.getUnit());
-        recipeIngredient.setQuantity(recipeIngredientDTO.getQuantity());
-        recipeIngredient.setOrderIndex(recipeIngredientDTO.getOrderIndex());
-        recipeIngredient.setIngredient(ingredient);
-
-        // Set RecipeIngredient:Recipe relationship
-        recipeIngredient.setRecipe(recipe);
-        return recipeIngredient;
-    }
-
-
     // If exists, return existing ingredient name, else create ingredient and return name of new ingredient
     private String findOrCreateIngredientByName(RecipeIngredientCreateDTO recipeIngredientCreateDTO) {
         Optional<String> existingIngredientName = ingredientRepository.findDistinctNameIgnoreCase(recipeIngredientCreateDTO.getName().trim());
