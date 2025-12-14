@@ -56,6 +56,7 @@ public class RecipeServiceImpl implements RecipeService {
         recipe.setName(recipeCreateDTO.getName());
         recipe.setDescription(recipeCreateDTO.getDescription());
         recipe.setRecipeUrl(recipeCreateDTO.getRecipeUrl());
+        recipe.setFavorite(recipeCreateDTO.isFavorite());
 
         // Find existing user by ID
         User user = userRepository.findById(recipeCreateDTO.getUser().getId())
@@ -136,7 +137,8 @@ public class RecipeServiceImpl implements RecipeService {
         updateDTO.getRecipeUrl().ifPresent(existingRecipe::setRecipeUrl);
         updateDTO.getRecipeIngredients().ifPresent(recipeIngredientUpdates ->
                 updateRecipeIngredients(existingRecipe, recipeIngredientUpdates));
-
+        updateDTO.getFavorite().ifPresent(existingRecipe::setFavorite);
+        
         // Save updated recipe
         Recipe savedRecipe = recipeRepository.save(existingRecipe);
         return recipeMapper.toRecipeDTO(savedRecipe);
