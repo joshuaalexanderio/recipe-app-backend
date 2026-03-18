@@ -39,5 +39,8 @@ server:
 # App-specific config
 app:
   todoist:
-    client-id: ${TODOIST_CLIENT_ID:}
-    client-secret: ${TODOIST_CLIENT_SECRET:}
+    client-id: ${TODOIST_CLIENT_ID}
+    client-secret: ${TODOIST_CLIENT_SECRET}
+    redirect-uri: ${TODOIST_REDIRECT_URI:http://localhost:8080/api/auth/todoist/callback}
+    scope: "data:read_write,data:delete"
+    frontend-callback-url: ${TODOIST_FRONTEND_CALLBACK:http://localhost:4200/settings/integrations}
