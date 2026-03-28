@@ -12,106 +12,102 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 /**
- * Handles the three legs of the Todoist OAuth2 flow:
- * 1. GET  /api/auth/todoist/authorize   → redirect user to Todoist
- * 2. GET  /api/auth/todoist/callback     → Todoist redirects back here
- * 3. GET  /api/auth/todoist/status       → is the user connected?
- * 4. POST /api/auth/todoist/disconnect   → revoke the connection
+ * Handles the three legs of the Todoist OAuth2 flow: 1. GET  /api/auth/todoist/authorize   →
+ * redirect user to Todoist 2. GET  /api/auth/todoist/callback     → Todoist redirects back here 3.
+ * GET  /api/auth/todoist/status       → is the user connected? 4. POST /api/auth/todoist/disconnect
+ * → revoke the connection
  */
 @RestController
 @RequestMapping("/api/auth/todoist")
 public class TodoistOAuthController {
 
-    private static final Logger log = LoggerFactory.getLogger(TodoistOAuthController.class);
+  private static final Logger log = LoggerFactory.getLogger(TodoistOAuthController.class);
 
-    private final TodoistOAuthService oauthService;
+  private final TodoistOAuthService oauthService;
 
-    /**
-     * Where to send the user after a successful OAuth callback (Angular app URL).
-     */
-    @Value("${todoist.frontend-callback-url:http://localhost:4200/settings/integrations}")
-    private String frontendCallbackUrl;
+  /**
+   * Where to send the user after a successful OAuth callback (Angular app URL).
+   */
+  @Value("${todoist.frontend-callback-url:http://localhost:4200/settings/integrations}")
+  private String frontendCallbackUrl;
 
-    public TodoistOAuthController(TodoistOAuthService oauthService) {
-        this.oauthService = oauthService;
+  public TodoistOAuthController(TodoistOAuthService oauthService) {
+    this.oauthService = oauthService;
+  }
+
+  // ── 1. Initiate ─────────────────────────────────────────────────
+
+  /**
+   * Kicks off the OAuth flow by redirecting the browser to Todoist's consent screen.
+   * <p>
+   * TODO: Replace getCurrentUserId() with your real auth extraction.
+   */
+  @GetMapping("/authorize")
+  public void authorize(HttpServletResponse response) throws IOException {
+    Long userId = getCurrentUserId();
+    String authorizeUrl = oauthService.buildAuthorizeUrl(userId);
+    response.sendRedirect(authorizeUrl);
+  }
+
+  // ── 2. Callback ─────────────────────────────────────────────────
+
+  /**
+   * Todoist redirects here after the user grants (or denies) access. We exchange the code for a
+   * token, persist it, and redirect the user back to the Angular frontend.
+   * <p>
+   * NOTE: Register this URL in the Todoist App Management Console as your OAuth Redirect URL, e.g.
+   * https://yourapi.com/api/auth/todoist/callback
+   */
+  @GetMapping("/callback")
+  public void callback(@RequestParam(value = "code", required = false) String code,
+      @RequestParam(value = "state", required = false) String state,
+      @RequestParam(value = "error", required = false) String error,
+      HttpServletResponse response) throws IOException {
+
+    if (error != null) {
+      log.warn("Todoist OAuth denied: {}", error);
+      response.sendRedirect(frontendCallbackUrl + "?todoist=error&reason=" + error);
+      return;
     }
 
-    // ── 1. Initiate ─────────────────────────────────────────────────
-
-    /**
-     * Kicks off the OAuth flow by redirecting the browser to Todoist's
-     * consent screen.
-     * <p>
-     * TODO: Replace getCurrentUserId() with your real auth extraction.
-     */
-    @GetMapping("/authorize")
-    public void authorize(HttpServletResponse response) throws IOException {
-        Long userId = getCurrentUserId();
-        String authorizeUrl = oauthService.buildAuthorizeUrl(userId);
-        response.sendRedirect(authorizeUrl);
+    try {
+      oauthService.handleCallback(code, state);
+      response.sendRedirect(frontendCallbackUrl + "?todoist=success");
+    } catch (IllegalStateException ex) {
+      log.error("Todoist OAuth callback failed", ex);
+      response.sendRedirect(frontendCallbackUrl + "?todoist=error&reason=state_mismatch");
     }
+  }
 
-    // ── 2. Callback ─────────────────────────────────────────────────
+  // ── 3. Status ───────────────────────────────────────────────────
 
-    /**
-     * Todoist redirects here after the user grants (or denies) access.
-     * We exchange the code for a token, persist it, and redirect
-     * the user back to the Angular frontend.
-     * <p>
-     * NOTE: Register this URL in the Todoist App Management Console
-     * as your OAuth Redirect URL, e.g.
-     * https://yourapi.com/api/auth/todoist/callback
-     */
-    @GetMapping("/callback")
-    public void callback(@RequestParam("code") String code,
-                         @RequestParam("state") String state,
-                         @RequestParam(value = "error", required = false) String error,
-                         HttpServletResponse response) throws IOException {
+  @GetMapping("/status")
+  public ResponseEntity<TodoistConnectionStatusDTO> status() {
+    Long userId = getCurrentUserId();
+    boolean connected = oauthService.isConnected(userId);
+    return ResponseEntity.ok(
+        connected
+            ? TodoistConnectionStatusDTO.success()
+            : TodoistConnectionStatusDTO.notConnected()
+    );
+  }
 
-        if (error != null) {
-            log.warn("Todoist OAuth denied: {}", error);
-            response.sendRedirect(frontendCallbackUrl + "?todoist=error&reason=" + error);
-            return;
-        }
+  // ── 4. Disconnect ───────────────────────────────────────────────
 
-        try {
-            oauthService.handleCallback(code, state);
-            response.sendRedirect(frontendCallbackUrl + "?todoist=success");
-        } catch (IllegalStateException ex) {
-            log.error("Todoist OAuth callback failed", ex);
-            response.sendRedirect(frontendCallbackUrl + "?todoist=error&reason=state_mismatch");
-        }
-    }
+  @PostMapping("/disconnect")
+  public ResponseEntity<TodoistConnectionStatusDTO> disconnect() {
+    Long userId = getCurrentUserId();
+    oauthService.disconnect(userId);
+    return ResponseEntity.ok(TodoistConnectionStatusDTO.notConnected());
+  }
 
-    // ── 3. Status ───────────────────────────────────────────────────
+  // ── Auth helper (replace with your real auth) ────────────────────
 
-    @GetMapping("/status")
-    public ResponseEntity<TodoistConnectionStatusDTO> status() {
-        Long userId = getCurrentUserId();
-        boolean connected = oauthService.isConnected(userId);
-        return ResponseEntity.ok(
-                connected
-                        ? TodoistConnectionStatusDTO.success()
-                        : TodoistConnectionStatusDTO.notConnected()
-        );
-    }
-
-    // ── 4. Disconnect ───────────────────────────────────────────────
-
-    @PostMapping("/disconnect")
-    public ResponseEntity<TodoistConnectionStatusDTO> disconnect() {
-        Long userId = getCurrentUserId();
-        oauthService.disconnect(userId);
-        return ResponseEntity.ok(TodoistConnectionStatusDTO.notConnected());
-    }
-
-    // ── Auth helper (replace with your real auth) ────────────────────
-
-    /**
-     * TODO: Replace with your actual authenticated-user extraction.
-     * e.g. SecurityContextHolder.getContext().getAuthentication().getPrincipal()
-     */
-    private Long getCurrentUserId() {
-        return 1L;
-    }
+  /**
+   * TODO: Replace with your actual authenticated-user extraction.
+   * e.g. SecurityContextHolder.getContext().getAuthentication().getPrincipal()
+   */
+  private Long getCurrentUserId() {
+    return 1L;
+  }
 }
