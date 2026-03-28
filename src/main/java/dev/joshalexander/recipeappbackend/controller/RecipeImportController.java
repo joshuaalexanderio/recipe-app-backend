@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RestController
-@RequestMapping("/api/recipeImport")
+@RequestMapping("/api/recipes/import")
 public class RecipeImportController {
     private static final Logger log = LoggerFactory.getLogger(RecipeImportController.class);
     private final RecipeImportService recipeImportService;
@@ -22,14 +22,15 @@ public class RecipeImportController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> importRecipe(@RequestParam String recipeURL) {
-        try {
-            RecipeImportDTO recipe = recipeImportService.getAIResponse(recipeURL);
-            return ResponseEntity.ok(recipe);
-        } catch (Exception e) {
-            log.error("Error importing recipe", e);
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", e.getMessage()));
-        }
+    public ResponseEntity<RecipeImportDTO> importRecipe(@RequestParam String recipeURL) {
+
+        RecipeImportDTO recipe = recipeImportService.getAIResponse(recipeURL);
+        return ResponseEntity.ok(recipe);
+    }
+    private boolean isVideoUrl(String recipeURL) {
+        return recipeURL.contains("youtube.com") ||
+                recipeURL.contains("youtu.be") ||
+                recipeURL.contains("vimeo.com") ||
+                recipeURL.contains("tiktok.com");
     }
 }
