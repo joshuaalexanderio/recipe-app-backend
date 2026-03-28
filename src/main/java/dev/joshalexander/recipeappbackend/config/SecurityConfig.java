@@ -13,43 +13,61 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    @Value("${SECURITY_USERNAME:admin}")
-    private String username;
 
-    @Value("${SECURITY_PASSWORD:password}")
-    private String password;
+  @Value("${SECURITY_USERNAME:admin}")
+  private String username;
 
+  @Value("${SECURITY_PASSWORD:password}")
+  private String password;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/docs/**", "/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/v3/api-docs").permitAll()
-                        .requestMatchers("/api/auth/todoist/callback").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .httpBasic(Customizer.withDefaults())
-//                .formLogin(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable);
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .authorizeHttpRequests(authorize -> authorize
+            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // allow CORS preflight
+            .requestMatchers("/docs/**", "/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
+                "/v3/api-docs/**", "/v3/api-docs").permitAll()
+            .requestMatchers("/api/auth/todoist/callback").permitAll()
+            .anyRequest().authenticated()
+        )
+        .httpBasic(Customizer.withDefaults())
+        .csrf(AbstractHttpConfigurer::disable);
 
+    return http.build();
+  }
 
-        return http.build();
-    }
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration config = new CorsConfiguration();
+    config.setAllowedOrigins(List.of("http://localhost:4200"));
+    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+    config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
+    config.setAllowCredentials(true); // required for Basic auth headers to be sent
+    config.setMaxAge(3600L);
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails userDetails = User.withDefaultPasswordEncoder()
-                .username(username)
-                .password(password)
-                .roles("USER")
-                .build();
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", config);
+    return source;
+  }
 
-        return new InMemoryUserDetailsManager(userDetails);
-    }
+  @Bean
+  public UserDetailsService userDetailsService() {
+    UserDetails userDetails = User.withDefaultPasswordEncoder()
+        .username(username)
+        .password(password)
+        .roles("USER")
+        .build();
 
+    return new InMemoryUserDetailsManager(userDetails);
+  }
 }
-
