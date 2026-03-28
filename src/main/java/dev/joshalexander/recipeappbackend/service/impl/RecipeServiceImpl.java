@@ -151,6 +151,9 @@ public class RecipeServiceImpl implements RecipeService {
         return value != null && value.length() > max ? value.substring(0, max) : value;
     }
 
+    public void deleteRecipe(Long id) {
+        recipeRepository.deleteById(id);
+    }
     @Override
     public void deleteAllRecipes() {
         recipeRepository.deleteAll();

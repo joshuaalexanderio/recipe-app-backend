@@ -48,6 +48,11 @@ public class RecipeController {
         RecipeDTO updatedRecipe = recipeService.updateRecipe(id, updateDTO);
         return ResponseEntity.ok(updatedRecipe);
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<RecipeDTO> deleteRecipe(@PathVariable Long id) {
+        recipeService.deleteRecipe(id);
+        return null;
+    }
 
     @DeleteMapping
     public ResponseEntity<Void> deleteAllRecipes() {
