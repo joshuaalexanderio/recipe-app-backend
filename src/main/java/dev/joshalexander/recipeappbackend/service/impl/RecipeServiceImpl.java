@@ -54,7 +54,7 @@ public class RecipeServiceImpl implements RecipeService {
     public RecipeDTO createRecipe(RecipeCreateDTO recipeCreateDTO) {
         Recipe recipe = new Recipe();
         recipe.setName(recipeCreateDTO.getName());
-        recipe.setDescription(recipeCreateDTO.getDescription());
+        recipe.setDescription(truncate(recipeCreateDTO.getDescription(), 500));
         recipe.setRecipeUrl(recipeCreateDTO.getRecipeUrl());
         recipe.setFavorite(recipeCreateDTO.isFavorite());
 
@@ -119,7 +119,7 @@ public class RecipeServiceImpl implements RecipeService {
 
         // Update fields in existingRecipe if present in updateDTO
         updateDTO.getName().ifPresent(existingRecipe::setName);
-        updateDTO.getDescription().ifPresent(existingRecipe::setDescription);
+        updateDTO.getDescription().ifPresent(d -> existingRecipe.setDescription(truncate(d, 500)));
         updateDTO.getRecipeUrl().ifPresent(existingRecipe::setRecipeUrl);
         updateDTO.getRecipeIngredients().ifPresent(recipeIngredientUpdates ->
                 updateRecipeIngredients(existingRecipe, recipeIngredientUpdates));
@@ -145,6 +145,10 @@ public class RecipeServiceImpl implements RecipeService {
             recipeIngredient.setRecipe(recipe);
             recipe.getRecipeIngredients().add(recipeIngredient);
         }
+    }
+
+    private static String truncate(String value, int max) {
+        return value != null && value.length() > max ? value.substring(0, max) : value;
     }
 
     @Override
