@@ -28,7 +28,7 @@ public class TodoistOAuthController {
   /**
    * Where to send the user after a successful OAuth callback (Angular app URL).
    */
-  @Value("${todoist.frontend-callback-url:http://localhost:4200/settings/integrations}")
+  @Value("${todoist.frontend-callback-url:https://joshalexander.dev/settings/integrations}")
   private String frontendCallbackUrl;
 
   public TodoistOAuthController(TodoistOAuthService oauthService) {
