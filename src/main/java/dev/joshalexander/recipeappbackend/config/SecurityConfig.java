@@ -32,6 +32,12 @@ public class SecurityConfig {
   @Value("${SECURITY_PASSWORD:password}")
   private String password;
 
+  @Value("${SECURITY_USERNAME_2:dave}")
+  private String username2;
+
+  @Value("${SECURITY_PASSWORD_2:password}")
+  private String password2;
+
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
@@ -74,11 +80,18 @@ public class SecurityConfig {
 
   @Bean
   public UserDetailsService userDetailsService() {
-    UserDetails userDetails = User.builder()
+    UserDetails user1 = User.builder()
         .username(username)
         .password(passwordEncoder().encode(password))
         .roles("USER")
         .build();
-    return new InMemoryUserDetailsManager(userDetails);
+
+    UserDetails user2 = User.builder()
+        .username(username2)
+        .password(passwordEncoder().encode(password2))
+        .roles("USER")
+        .build();
+
+    return new InMemoryUserDetailsManager(user1, user2);
   }
 }
