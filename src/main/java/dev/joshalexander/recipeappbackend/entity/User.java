@@ -10,34 +10,37 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table(name="users")
+@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(unique=true, nullable=false)
-    private String todoistUserId;
+  @Column(unique = true, nullable = false)
+  private String todoistUserId;
 
-    @Column(nullable=false)
-    private String todoistAccessToken;
+  @Column(nullable = false)
+  private String todoistAccessToken;
 
-    @Column(length=100)
-    @Size(min = 1, max = 100, message="Email must be between 1-100 characters")
-    private String name;
+  @Column(unique = true, nullable = false)
+  private String username;
 
-    @Column(length=254)
-    @Size(max=254, message="Email cannot exceed 254 characters")
-    private String email;
+  @Column(length = 100)
+  @Size(min = 1, max = 100, message = "Email must be between 1-100 characters")
+  private String name;
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+  @Column(length = 254)
+  @Size(max = 254, message = "Email cannot exceed 254 characters")
+  private String email;
 
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
+  @CreationTimestamp
+  private LocalDateTime createdAt;
+
+  @UpdateTimestamp
+  private LocalDateTime updatedAt;
 
 
 }

@@ -6,6 +6,7 @@ import dev.joshalexander.recipeappbackend.entity.User;
 import dev.joshalexander.recipeappbackend.mapper.EntityMapper;
 import dev.joshalexander.recipeappbackend.repository.UserRepository;
 import dev.joshalexander.recipeappbackend.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,30 +14,39 @@ import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private final EntityMapper userMapper;
-    private final UserRepository userRepository;
 
-    public UserServiceImpl(EntityMapper userMapper, UserRepository userRepository) {
-        this.userMapper = userMapper;
-        this.userRepository = userRepository;
-    }
+  private final EntityMapper userMapper;
+  private final UserRepository userRepository;
 
-    @Override
-    public List<UserDTO> getAllUsers() {
-        return userRepository.findAll()
-                .stream()
-                .map(userMapper::toUserDTO)
-                .toList();
-    }
+  public UserServiceImpl(EntityMapper userMapper, UserRepository userRepository) {
+    this.userMapper = userMapper;
+    this.userRepository = userRepository;
+  }
 
-    public Optional<UserDTO> getUserById(Long id) {
-        return userRepository.findById(id)
-                .map(userMapper::toUserDTO);
-    }
+  public User getCurrentUser() {
+    String username = SecurityContextHolder.getContext()
+        .getAuthentication()
+        .getName();
+    return userRepository.findByUsername(username)
+        .orElseThrow(() -> new RuntimeException("User not found for username: " + username));
+  }
 
-    public UserDTO createUser(UserCreateDTO userCreateDTO) {
-        User newUser = userMapper.toUser(userCreateDTO);
-        userRepository.save(newUser);
-        return userMapper.toUserDTO(newUser);
-    }
+  @Override
+  public List<UserDTO> getAllUsers() {
+    return userRepository.findAll()
+        .stream()
+        .map(userMapper::toUserDTO)
+        .toList();
+  }
+
+  public Optional<UserDTO> getUserById(Long id) {
+    return userRepository.findById(id)
+        .map(userMapper::toUserDTO);
+  }
+
+  public UserDTO createUser(UserCreateDTO userCreateDTO) {
+    User newUser = userMapper.toUser(userCreateDTO);
+    userRepository.save(newUser);
+    return userMapper.toUserDTO(newUser);
+  }
 }

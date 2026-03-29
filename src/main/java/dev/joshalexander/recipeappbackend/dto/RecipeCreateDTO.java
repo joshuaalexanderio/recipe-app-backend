@@ -14,13 +14,13 @@ import java.util.List;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RecipeCreateDTO {
-    @NotBlank
-    private String name;
-    private String description;
-    @Pattern(regexp = "^https?://[^\\s]+$", message = "Recipe URL must be a valid HTTP/HTTPS URL")
-    private String recipeUrl;
-    private UserDTO user;
-    private boolean favorite;
-    private List<RecipeIngredientCreateDTO> recipeIngredients;
+
+  @NotBlank
+  private String name;
+  private String description;
+  @Pattern(regexp = "^https?://[^\\s]+$", message = "Recipe URL must be a valid HTTP/HTTPS URL")
+  private String recipeUrl;
+  private boolean favorite;
+  private List<RecipeIngredientCreateDTO> recipeIngredients;
 }
 
