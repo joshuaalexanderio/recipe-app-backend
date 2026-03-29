@@ -1,6 +1,6 @@
 # Recipe App Backend API
 
-A Spring Boot REST API for managing recipes and ingredients, providing the backend for the [Recipe App Frontend](https://github.com/stopthink/recipe-app-frontend).
+A Spring Boot REST API for managing recipes and ingredients, providing the backend for the [Recipe App Frontend](https://github.com/joshuaalexanderio/recipe-app-ng).
 
 ## Features
 
