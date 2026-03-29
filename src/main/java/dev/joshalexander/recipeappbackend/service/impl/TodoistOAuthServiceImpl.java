@@ -49,13 +49,14 @@ public class TodoistOAuthServiceImpl implements TodoistOAuthService {
   public String buildAuthorizeUrl(Long userId) {
     String state = generateState();
     pendingStates.put(state, userId);
-
+    log.info("Redirect URI: {}", props.redirectUri());
     return UriComponentsBuilder.fromUriString(TodoistProperties.AUTHORIZE_URL)
         .queryParam("client_id", props.clientId())
         .queryParam("scope", props.scope())
         .queryParam("state", state)
         .queryParam("redirect_uri", props.redirectUri())
         .toUriString();
+
   }
 
   // ── Step 2: Handle the callback & exchange code for token ────────
