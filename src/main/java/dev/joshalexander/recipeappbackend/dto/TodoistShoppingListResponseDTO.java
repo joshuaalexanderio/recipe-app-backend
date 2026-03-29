@@ -7,7 +7,6 @@ import java.util.List;
  */
 public record TodoistShoppingListResponseDTO(
         String projectId,
-        String projectName,
         int taskCount,
         List<String> taskIds
 ) {
