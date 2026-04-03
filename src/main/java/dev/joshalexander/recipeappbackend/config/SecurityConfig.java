@@ -44,8 +44,6 @@ public class SecurityConfig {
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .authorizeHttpRequests(authorize -> authorize
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // allow CORS preflight
-            .requestMatchers("/docs/**", "/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
-                "/v3/api-docs/**", "/v3/api-docs").permitAll()
             .requestMatchers("/api/auth/todoist/callback").permitAll()
             .anyRequest().authenticated()
         )
