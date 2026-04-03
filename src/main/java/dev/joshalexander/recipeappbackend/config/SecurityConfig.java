@@ -26,6 +26,9 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
+  @Value("${spring.profiles.active:}")
+  private String activeProfile;
+
   @Value("${SECURITY_USERNAME:admin}")
   private String username;
 
@@ -42,11 +45,16 @@ public class SecurityConfig {
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-        .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // allow CORS preflight
-            .requestMatchers("/api/auth/todoist/callback").permitAll()
-            .anyRequest().authenticated()
-        )
+        .authorizeHttpRequests(authorize -> {
+          if (activeProfile.contains("dev")) {
+            authorize.anyRequest().permitAll();
+          } else {
+            authorize
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .requestMatchers("/api/auth/todoist/callback").permitAll()
+                .anyRequest().authenticated();
+          }
+        })
         .httpBasic(Customizer.withDefaults())
         .csrf(AbstractHttpConfigurer::disable);
 
