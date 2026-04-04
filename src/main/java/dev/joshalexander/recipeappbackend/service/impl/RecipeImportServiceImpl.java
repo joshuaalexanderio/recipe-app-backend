@@ -116,7 +116,7 @@ public class RecipeImportServiceImpl implements RecipeImportService {
         
         RULES — follow without exception:
         - Extract ONLY ingredients explicitly present in the page content above.
-          Do NOT use your training knowledge to infer, guess, or add any ingredient \
+          Do NOT use your training knowledge to infer, guess, or add any ingredient
           not found in the text.
         - The recipe may have multiple sections (e.g. "Crepe:", "Sauce:", "Assembly:").
           Extract ALL ingredients from ALL sections without skipping any.
@@ -127,11 +127,13 @@ public class RecipeImportServiceImpl implements RecipeImportService {
           Example: "4 cups all-purpose flour" → name: "all-purpose flour", quantity: "4", unit: "cups"
         - Abbreviate units: tablespoon→tbsp, teaspoon→tsp, ounce→oz, pound→lb,
           milliliter→mL, gram→g, kilogram→kg. Keep "cup", "bunch", "package", "clove" as-is.
-        - If no unit applies (e.g. "5 large eggs"), set unit to "each".
+        - If no standard unit applies, use any size descriptor as the unit.
+          Example: "5 large eggs"   → name: "eggs",   quantity: "5", unit: "large"
+          Example: "1 medium onion" → name: "onion",  quantity: "1", unit: "medium"
+          Example: "2 whole cloves" → name: "cloves", quantity: "2", unit: "whole"
         - If no quantity applies (e.g. "neutral oil for frying"), set quantity to "to taste" and unit to "".
         - Strip brand names and parenthetical notes from ingredient names.
-          Example: "hoisin sauce (Brand X preferred)" → "hoisin sauce"
-        - orderIndex must be a sequential integer starting at 1, following top-to-bottom \
+        - orderIndex must be a sequential integer starting at 1, following top-to-bottom
           order of appearance in the page content.
         - description must be 500 characters or fewer and describe the dish, not the steps.
         - Set recipeUrl to exactly: %s
@@ -140,27 +142,28 @@ public class RecipeImportServiceImpl implements RecipeImportService {
 
   private String buildYoutubePrompt(String recipeURL) {
     return """
-        You are a precise recipe data extractor.
+         You are a precise recipe data extractor analyzing a cooking video.
         
         Watch the YouTube video at: %s
         
-        First check the video description for a link to the written recipe. If a recipe \
-        link is present, use the ingredients from that link. Otherwise, extract ingredients \
-        from what is shown or spoken in the video.
+         Extract every ingredient shown on screen or spoken aloud, in the order they appear.
         
-        RULES — follow without exception:
-        - Extract ONLY ingredients explicitly shown or mentioned in the video/description.
-          Do NOT use your training knowledge to add anything not present.
-        - Extract ALL ingredients across ALL recipe sections.
-        - Each entry maps to exactly one ingredient. No merging, no splitting, no duplicates.
-        - Separate quantity and unit from the name.
-        - Abbreviate units: tablespoon→tbsp, teaspoon→tsp, ounce→oz, pound→lb,
-          milliliter→mL, gram→g, kilogram→kg. Keep "cup", "bunch", "package", "clove" as-is.
-        - No unit → set unit to "each". No quantity → set quantity to "to taste", unit to "".
-        - Strip brand names and parenthetical notes from ingredient names.
-        - orderIndex: sequential integer starting at 1, top-to-bottom order.
-        - description: 500 chars max, describes the dish.
-        - Set recipeUrl to exactly: %s
+         RULES — follow without exception:
+         - Extract ONLY ingredients explicitly shown or spoken. No training knowledge.
+         - All sections and components must be included (e.g. "Batter:", "Sauce:", "For serving:").
+         - Each entry maps to exactly one ingredient. No merging, splitting, or duplicates.
+         - Separate quantity and unit from name.
+         - Abbreviate units: tablespoon→tbsp, teaspoon→tsp, ounce→oz, pound→lb,
+           milliliter→mL, gram→g, kilogram→kg. Keep "cup", "bunch", "package", "clove" as-is.
+        - If no standard unit applies, use any size descriptor as the unit.
+            Example: "5 large eggs"  → name: "eggs",  quantity: "5", unit: "large"
+            Example: "1 medium onion" → name: "onion", quantity: "1", unit: "medium"
+            Example: "2 whole cloves" → name: "cloves", quantity: "2", unit: "whole"       \s
+        - If no quantity applies (e.g. "neutral oil for frying"), set quantity to "to taste" and unit to "".
+         - No quantity → set quantity to "to taste", unit to "".
+         - orderIndex: sequential integer from 1, in order of appearance.
+         - description: 500 chars max, describes the dish not the steps.
+         - Set recipeUrl to exactly: %s
         """.formatted(recipeURL, recipeURL);
   }
 
