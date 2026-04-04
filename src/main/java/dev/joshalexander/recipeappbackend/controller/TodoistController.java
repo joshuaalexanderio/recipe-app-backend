@@ -1,9 +1,11 @@
 package dev.joshalexander.recipeappbackend.controller;
 
 import dev.joshalexander.recipeappbackend.dto.*;
+import dev.joshalexander.recipeappbackend.repository.UserRepository;
 import dev.joshalexander.recipeappbackend.service.TodoistService;
 import dev.joshalexander.recipeappbackend.service.TodoistShoppingListService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +20,14 @@ public class TodoistController {
 
     private final TodoistService todoistService;
     private final TodoistShoppingListService shoppingListService;
+    private final UserRepository userRepository;
 
     public TodoistController(TodoistService todoistService,
-                             TodoistShoppingListService shoppingListService) {
+                             TodoistShoppingListService shoppingListService,
+                             UserRepository userRepository) {
         this.todoistService = todoistService;
         this.shoppingListService = shoppingListService;
+        this.userRepository = userRepository;
     }
 
     // ── Projects ────────────────────────────────────────────────────
@@ -93,12 +98,10 @@ public class TodoistController {
                 shoppingListService.sendIngredientsToTodoist(getCurrentUserId(), request));
     }
 
-    // ── Auth helper (replace with your real auth) ────────────────────
-
-    /**
-     * TODO: Replace with your actual authenticated-user extraction.
-     */
     private Long getCurrentUserId() {
-        return 1L;
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalStateException("No user found for username: " + username))
+                .getId();
     }
 }
