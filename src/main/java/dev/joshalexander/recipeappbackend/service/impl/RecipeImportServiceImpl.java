@@ -21,10 +21,11 @@ public class RecipeImportServiceImpl implements RecipeImportService {
   private static final Logger log = LoggerFactory.getLogger(RecipeImportServiceImpl.class);
 
   private final ObjectMapper objectMapper;
+  private final RestClient restClient;
 
   public RecipeImportServiceImpl(ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;
-    RestClient restClient = RestClient.builder()
+    this.restClient = RestClient.builder()
         .defaultHeader("User-Agent", "Mozilla/5.0 (compatible; RecipeImporter/1.0)")
         .build();
   }
