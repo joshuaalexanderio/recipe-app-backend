@@ -33,6 +33,7 @@ public class RecipeImportServiceImpl implements RecipeImportService {
   @Override
   public RecipeImportDTO getAIResponse(String recipeURL) {
     log.info("Importing recipe from URL: {}", recipeURL);
+    long startTime = System.currentTimeMillis();
 
     boolean isYoutube = recipeURL.contains("youtube.com") || recipeURL.contains("youtu.be");
 
@@ -105,10 +106,13 @@ public class RecipeImportServiceImpl implements RecipeImportService {
 
     try {
       RecipeImportDTO recipe = objectMapper.readValue(jsonResponse, RecipeImportDTO.class);
-      log.info("Successfully parsed recipe: {}", recipe.getName());
+      log.info("Successfully parsed recipe '{}' in {}s", recipe.getName(),
+          String.format("%.1f", (System.currentTimeMillis() - startTime) / 1000.0));
       return recipe;
     } catch (Exception e) {
-      log.error("Failed to parse AI response. Raw response: {}", jsonResponse, e);
+      log.error("Failed to parse AI response after '{}'. Raw response: {}",
+          String.format("%.1f", (System.currentTimeMillis() - startTime) / 1000.0), jsonResponse,
+          e);
       throw new RuntimeException("Failed to parse AI response: " + e.getMessage(), e);
     }
   }
