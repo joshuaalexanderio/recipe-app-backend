@@ -3,7 +3,6 @@ package dev.joshalexander.recipeappbackend.controller;
 import dev.joshalexander.recipeappbackend.dto.TodoistConnectionStatusDTO;
 import dev.joshalexander.recipeappbackend.repository.UserRepository;
 import dev.joshalexander.recipeappbackend.service.TodoistOAuthService;
-import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Handles the three legs of the Todoist OAuth2 flow: 1. GET  /api/auth/todoist/authorize   →
@@ -31,7 +32,7 @@ public class TodoistOAuthController {
   /**
    * Where to send the user after a successful OAuth callback (Angular app URL).
    */
-  @Value("${todoist.frontend-callback-url:https://joshalexander.dev/settings/integrations}")
+  @Value("${todoist.frontend-callback-url:https://www.joshalexander.dev}")
   private String frontendCallbackUrl;
 
   public TodoistOAuthController(TodoistOAuthService oauthService, UserRepository userRepository) {
@@ -42,10 +43,10 @@ public class TodoistOAuthController {
   // ── 1. Initiate ─────────────────────────────────────────────────
 
   @GetMapping("/authorize")
-  public void authorize(HttpServletResponse response) throws IOException {
+  public ResponseEntity<Map<String, String>> authorize() {
     Long userId = getCurrentUserId();
     String authorizeUrl = oauthService.buildAuthorizeUrl(userId);
-    response.sendRedirect(authorizeUrl);
+    return ResponseEntity.ok(Map.of("url", authorizeUrl));
   }
 
   // ── 2. Callback ─────────────────────────────────────────────────
