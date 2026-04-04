@@ -9,10 +9,10 @@ import dev.joshalexander.recipeappbackend.service.RecipeImportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
+
 import java.util.Arrays;
 
 @Service
@@ -36,9 +36,22 @@ public class RecipeImportServiceImpl implements RecipeImportService {
 
     boolean isYoutube = recipeURL.contains("youtube.com") || recipeURL.contains("youtu.be");
 
-    String prompt = isYoutube
-        ? buildYoutubePrompt(recipeURL)
-        : buildStaticPrompt(recipeURL, fetchPageText(recipeURL));
+    String prompt;
+    boolean useVideoContent = false;
+
+    if (isYoutube) {
+      String descriptionLink = extractRecipeLinkViaGemini(recipeURL);
+      if (descriptionLink != null) {
+        log.info("Found recipe link in YouTube description: {}", descriptionLink);
+        prompt = buildStaticPrompt(descriptionLink, fetchPageText(descriptionLink));
+      } else {
+        log.info("No recipe link found in description, extracting from video directly");
+        prompt = buildYoutubePrompt(recipeURL);
+        useVideoContent = true;
+      }
+    } else {
+      prompt = buildStaticPrompt(recipeURL, fetchPageText(recipeURL));
+    }
 
     String schemaJson = """
         {
@@ -76,7 +89,7 @@ public class RecipeImportServiceImpl implements RecipeImportService {
     Client client = new Client();
     GenerateContentResponse response;
 
-    if (isYoutube) {
+    if (useVideoContent) {
       Part videoPart = Part.fromUri(recipeURL, "video/mp4");
       Part textPart = Part.fromText(prompt);
       Content contents = Content.builder()
@@ -144,7 +157,7 @@ public class RecipeImportServiceImpl implements RecipeImportService {
     return """
          You are a precise recipe data extractor analyzing a cooking video.
         
-        Watch the YouTube video at: %s
+         Video URL: %s
         
          Extract every ingredient shown on screen or spoken aloud, in the order they appear.
         
@@ -167,12 +180,44 @@ public class RecipeImportServiceImpl implements RecipeImportService {
         """.formatted(recipeURL, recipeURL);
   }
 
-  // --- Page fetcher ---
+  private String extractRecipeLinkViaGemini(String youtubeUrl) {
+    try {
+      log.info("Checking YouTube description for recipe link: {}", youtubeUrl);
 
-  /**
-   * Fetches the page and strips HTML tags, leaving only visible text. Passing raw text (not HTML)
-   * to the model reduces noise and token waste.
-   */
+      String linkPrompt = """
+          Look at the description of this YouTube video.
+          If there is a link to an external recipe page (not YouTube), return ONLY that URL, nothing else.
+          If there is no recipe link, return ONLY the word "none".
+          """;
+
+      Part videoPart = Part.fromUri(youtubeUrl, "video/mp4");
+      Part textPart = Part.fromText(linkPrompt);
+      Content contents = Content.builder()
+          .parts(Arrays.asList(videoPart, textPart))
+          .build();
+
+      Client client = new Client();
+      String result = client.models.generateContent(
+          "models/gemini-2.5-flash",
+          contents,
+          null
+      ).text().trim();
+
+      log.info("Gemini description link result: {}", result);
+
+      if (result.equalsIgnoreCase("none") || result.isBlank() || !result.startsWith("http")) {
+        return null;
+      }
+
+      return result;
+
+    } catch (Exception e) {
+      log.warn("Could not extract recipe link from YouTube description: {}", e.getMessage());
+      return null;
+    }
+  }
+
+
   private String fetchPageText(String url) {
     String html;
 
