@@ -138,8 +138,11 @@ public class RecipeImportServiceImpl implements RecipeImportService {
         - The recipe may have multiple sections (e.g. "Crepe:", "Sauce:", "Assembly:").
           Extract ALL ingredients from ALL sections without skipping any.
         - Each ingredient entry maps to exactly one line item from the source.
-          Do NOT merge multiple ingredients, and do NOT split one into multiple entries.
+          Do NOT merge multiple ingredients unless they have same name, and do NOT split one 
+          into multiple entries.
         - Do NOT duplicate any ingredient. Every line item appears exactly once.
+        - If the exact same ingredient is repeated, merge into one ingredient entry with the 
+           combined quantities after transferring to common unit .
         - Separate quantity and unit from the ingredient name.
           Example: "4 cups all-purpose flour" → name: "all-purpose flour", quantity: "4", unit: "cups"
         - Abbreviate units: tablespoon→tbsp, teaspoon→tsp, ounce→oz, pound→lb,
